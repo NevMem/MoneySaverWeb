@@ -118,14 +118,14 @@ table {
     background-color: #3a0c46;
 
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 1fr 10fr;
 }
 
 .profile .add-part {
     display: flex;
     flex-direction: column;
-    padding-left: calc(50% - 220px);
-    padding-right: calc(50% - 220px);
+    padding-left: calc(50% - 320px);
+    padding-right: calc(50% - 320px);
 }
 
 .profile .add-part * {
@@ -140,7 +140,7 @@ table {
 
     border: none;
     background-color: rgb(73, 20, 87);
-    width: 100%;
+    /* width: 100%; */
 }
 
 .profile h2, .profile h1 {
