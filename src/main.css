@@ -69,8 +69,8 @@ main {
 }
 
 .btn {
-    min-width: 200px;
-    padding: 10px 0px;
+    min-width: 100px;
+    padding: 10px 10px;
     margin: 0px 0px;
     font-size: 22px;
     border: 1px solid #7A0099;
@@ -140,7 +140,6 @@ table {
 
     border: none;
     background-color: rgb(73, 20, 87);
-    /* width: 100%; */
 }
 
 .profile h2, .profile h1 {
@@ -269,6 +268,33 @@ table {
 @media screen and (max-width: 1200px) {
     .dashboard {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-rows: 1fr auto;
+    }
+
+    .profile {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        grid-row-gap: 40px;
+    }
+
+    .wrapper {
+        grid-template-columns: repeat(3, 3px) repeat(10, 1fr) repeat(3, 3px);
+    }
+
+    .login-form {
+        padding: 0 0;
+        margin: 0 0;
+    }
+
+    .login-from input {
+        width: 100%;
+    }
+
+    .input-block {
+        width: unset;
+    }
+
+    .input-block input {
+        width: calc(100% - 20px);
     }
 }

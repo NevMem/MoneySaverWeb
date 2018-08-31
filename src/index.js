@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import registerServiceWorker from './registerServiceWorker'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { Provider } from 'react-redux' 
 import { createStore } from 'redux'
@@ -23,7 +22,7 @@ let reducer = (state, action) => {
         localStorage.removeItem('token')
         localStorage.removeItem('first_name')
         localStorage.removeItem('last_name')
-        return { ...state, login: undefined, token: undefined, first_name: undefined, last_name: undefined }
+        return { ...state, records: [], counter: {}, fullSum: 0, average: 0, countOfDays: 0, differentDays: new Set(), daySum: {}, login: undefined, token: undefined, first_name: undefined, last_name: undefined }
     } else if (action.type === 'ADD_RECORD') {
         let { record } = action.payload
         state = { ...state, records: [ ...state.records, record ] }
