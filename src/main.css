@@ -1,0 +1,274 @@
+* {
+    padding: 0 0;
+    margin: 0 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 200;
+}
+
+html {
+    background-color: #202020;
+    color: white;
+}
+
+.wrapper {
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+
+    grid-template-columns: repeat(16, 1fr);
+    grid-template-rows: 90px auto 70px;
+
+    grid-gap: 10px;
+    padding-top: 10px;
+}
+
+header {
+    grid-row: 1;
+    grid-column: 4 / 14;
+    background-color: #7a0099;
+    line-height: 70px;
+
+    padding: 10px 10px;
+}
+
+header h1 {
+    font-weight: 200;
+}
+
+main {
+    grid-row: 2;
+    grid-column: 4 / 14;
+}
+
+.login-form {
+    /* width: 900px; */
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 60px 90px 90px 90px;
+    background-color: #3a0c46;
+    padding-left: calc(50% - 300px);
+    padding-right: calc(50% - 300px);
+}
+
+.login-form * {
+    margin: 20px 30px;
+    font-weight: 200;
+}
+
+.login-form input {
+    border: none;
+    padding: 7px 14px;
+    outline: none;
+    font-size: 20px;
+}
+
+.login-form .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.btn {
+    min-width: 200px;
+    padding: 10px 0px;
+    margin: 0px 0px;
+    font-size: 22px;
+    border: 1px solid #7A0099;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    outline: none;
+}
+
+footer {
+    grid-row: 3;
+    grid-column: 4 / 14;
+}
+
+.records {
+    width: 100%;
+    text-align: center;
+}
+
+.records thead {
+    font-size: 24px;
+    line-height: 60px;
+}
+
+tbody tr {
+    line-height: 40px;
+    font-size: 18px;
+}
+
+.records .increase {
+    color: rgba(82, 255, 82, 0.943);
+}
+
+.records .decrease {
+    color: rgba(255, 82, 82, 0.943);
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.profile {
+    font-weight: 200;
+    padding: 20px 20px;
+    background-color: #3a0c46;
+
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+.profile .add-part {
+    display: flex;
+    flex-direction: column;
+    padding-left: calc(50% - 220px);
+    padding-right: calc(50% - 220px);
+}
+
+.profile .add-part * {
+    margin-bottom: 20px;
+}
+
+.add-part input {
+    padding: 4px 10px;
+    outline: none;
+    font-size: 26px;
+    color: white;
+
+    border: none;
+    background-color: rgb(73, 20, 87);
+    width: 100%;
+}
+
+.profile h2, .profile h1 {
+    font-weight: 200;
+}
+
+.main-info {
+    width: 100%;
+    line-height: 50px;
+    font-size: 24px;
+}
+
+.main-info td {
+    padding: 10px 10px;
+    background-color: #292929;
+}
+
+.main-info thead td {
+    background-color: rgba(58, 12, 70, 0.548);
+}
+
+.card {
+    padding: 10px 10px;
+    background-color: #292929;
+    margin: 10px 0;
+    box-shadow: 0px 3px 6px #202020;
+}
+
+.profile .add-part .input-block {
+    width: 100%;
+    padding: 0 0;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0px;
+}
+
+.input-block input {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.input-block .input-label {
+    margin-bottom: 4px;
+}
+
+.date-block {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.date-block input {
+    margin-right: 5px;
+    max-width: 82px;
+    text-align: center;
+}
+
+.tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.tag {
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #491457;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.tag.active-tag {
+    background-color: #7A0099;
+}
+
+.wallet {
+    outline: none;
+    padding: 7px 12px;
+    font-size: 20px;
+    border: none;
+    background-color: #491457;
+    color: white;
+    cursor: pointer;
+}
+
+.error {
+    font-weight: 250;
+    color: rgb(199, 73, 0);
+}
+
+.success {
+    font-weight: 250;
+    color: rgb(73, 199, 0);
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+
+.info-table .fullSum, .info-table .average {
+    font-weight: 200;
+    text-align: center;
+}
+
+.fullSum .value, .average .value {
+    line-height: 100px;
+    font-size: 60px;
+}
+
+.fullSum .label, .average .label {
+    font-size: 20px;
+    line-height: 20px;
+    color: rgba(255, 255, 255, .7);
+}
+
+.average .value {
+    font-size: 80px;
+    line-height: 120px;
+}
+
+@media screen and (max-width: 1200px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
