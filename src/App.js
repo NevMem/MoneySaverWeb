@@ -3,6 +3,7 @@ import './main.css'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { Doughnut, Bar } from 'react-chartjs-2'
+import delete_icon from './delete-icon.svg'
 
 class App extends Component {
 
@@ -21,7 +22,7 @@ class App extends Component {
       day: current.getDate(), 
       hour: current.getHours(), 
       minute: current.getMinutes(), 
-      allTags: [ 'Еда', 'Траспорт', 'Посуда', 'Связь', 'Разное' ], 
+      allTags: [ 'Еда', 'Транспорт', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
       currentTag: 0, 
       allWallets: [ 'Наличные', 'Сбербанк' ], 
       currentWallet: 0, 
@@ -78,7 +79,7 @@ class App extends Component {
     this.props.dispatch({ type: 'LOGGED_OUT', payload: {} })
   }
 
-  allColors = [ '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12', '#FF206E' ]
+  allColors = [ '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12', '#FF206E', '#5C80BC', 'F0E100' ]
 
   onTagClick(index, event) {
     this.setState({ currentTag: index })
@@ -130,6 +131,20 @@ class App extends Component {
     } else {
       this.setState({ add_panel_error: 'Something went wrong check data' })
     }
+  }
+
+  removeRecord(record, event) {
+    axios.post('/api/remove', { login: this.props.login, token: this.props.token, record_id: record._id }).then(data => data.data)
+    .then(data => {
+      if (data.err) {
+        alert(data.err) 
+      } else {
+        alert('ok')
+      }
+    }).catch(err => {
+      console.log(err)
+      alert(err)
+    })
   }
 
   render() {
@@ -291,6 +306,7 @@ class App extends Component {
                         <td>{el.value}</td>
                         <td>{tags}</td>
                         <td>{date}</td>
+                        <td className = 'remove-btn'><img onClick = {this.removeRecord.bind(this, el)} src = {delete_icon} alt = 'delete' /></td>
                       </tr>
                     )
                   })}

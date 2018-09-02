@@ -118,14 +118,14 @@ table {
     background-color: #3a0c46;
 
     display: grid;
-    grid-template-columns: 1fr 10fr;
+    grid-template-columns: 1fr 5fr;
 }
 
 .profile .add-part {
     display: flex;
     flex-direction: column;
-    padding-left: calc(50% - 320px);
-    padding-right: calc(50% - 320px);
+    padding-left: calc(50% - 340px);
+    padding-right: calc(50% - 340px);
 }
 
 .profile .add-part * {
@@ -265,6 +265,25 @@ table {
     line-height: 120px;
 }
 
+.remove-btn {
+    cursor: pointer;
+    padding: 6px 6px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.remove-btn img {
+    margin-top: 6px;
+}
+
+@media screen and (max-width: 1500px) {
+    .wrapper {
+        grid-template-columns: repeat(3, 30px) repeat(10, 1fr) repeat(3, 30px);
+    }
+}
+
 @media screen and (max-width: 1200px) {
     .dashboard {
         grid-template-columns: 1fr;
@@ -275,6 +294,11 @@ table {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr auto;
         grid-row-gap: 40px;
+    }
+
+    .profile .add-part {
+        padding-right: 20px;
+        padding-left: 20px;
     }
 
     .wrapper {
