@@ -32,12 +32,22 @@ class App extends Component {
 
       modalVisible: false, 
       modalHeader: '-- TODO --', 
-      modalContent: '-- TODO --'
+      modalContent: '-- TODO --', 
+
+      edit_name: '', 
+      edit_value: 0, 
+      edit_day: -1, 
+      edit_year: -1, 
+      edit_month: -1, 
+      edit_hour: -1, 
+      edit_minute: -1, 
+      current_edit_record: undefined
     }
   }
 
   inputChange(event) {
     this.setState({ [event.target.id]: event.target.value })
+    this.forceUpdate()
   }
 
   login(event) {
@@ -156,24 +166,34 @@ class App extends Component {
     })
   }
 
+  doChange(event) {
+    event.preventDefault()
+    
+    alert('This option is not ready now. I am so sorry for that')
+  }
+
   removeRecord(record, event) {
     event.preventDefault()
-    this.setState({ modalHeader: 'Edit', modalContent: (
-      <div>
-        <h3>You are really want to remove this record?</h3>
-        <br/>
-        <div className = 'row'>
-          <button onClick = {this.doRemove.bind(this, record)} className = 'btn btn-remove'>REMOVE</button>
-          <button onClick = {this.hideModal.bind(this)} className = 'btn btn-cancel'>CANCEL</button>
-        </div>
-      </div>
-    ) })
+    this.setState({ modalHeader: 'Remove record', current_edit_record: record, modalContent: 'remove' })
     this.showModal()
   }
 
   editRecord(record, event) {
     event.preventDefault()
-    alert('Sorry, this functionality is not ready now')
+    console.log(record)
+    this.setState({ 
+      modalHeader: 'Edit record', 
+      edit_year: record.date.year, 
+      edit_month: record.date.month, 
+      edit_day: record.date.day, 
+      edit_hour: record.date.hour, 
+      edit_minute: record.date.minute, 
+      current_edit_record: record, 
+      edit_name: record.name, 
+      edit_value: -record.value, 
+      modalContent: 'edit' 
+    })
+    this.showModal()
   }
 
   showModal() {
@@ -187,9 +207,68 @@ class App extends Component {
   }
 
   changeModalRender() {
-    return (
-      <div>{this.state.modalContent}</div>
-    )
+    if (this.state.modalContent === 'edit') {
+      return (
+        <div>
+          <h3>You can change fields here</h3>
+          <br/>
+          <div className = 'edit-form'>
+            <div className = 'edit-form-input-group'>
+              <label>Название</label>
+              <input id = 'edit_name' onChange = {this.inputChange.bind(this)} value = {this.state.edit_name} />
+            </div>
+            <div className = 'edit-form-input-group'>
+              <label>Стоимость</label>
+              <input id = 'edit_value' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_value} />
+            </div>
+            <div className = 'row'>
+              <div className = 'edit-form-input-group'>
+                <label>Year</label>
+                <input id = 'edit_year' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_year} />
+              </div>
+
+              <div className = 'edit-form-input-group'>
+                <label>Month</label>
+                <input id = 'edit_month' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_month} />
+              </div>
+
+              <div className = 'edit-form-input-group'>
+                <label>Day</label>
+                <input id = 'edit_day' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_day} />
+              </div>
+
+              <div className = 'edit-form-input-group'>
+                <label>Hour</label>
+                <input id = 'edit_hour' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_hour} />
+              </div>
+
+              <div className = 'edit-form-input-group'>
+                <label>Minute</label>
+                <input id = 'edit_minute' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_minute} />
+              </div>
+            </div>
+          </div>
+          <br />
+          <div className = 'row'>
+            <button onClick = {this.doChange.bind(this)} className = 'btn btn-danger'>CHANGE</button>
+            <button onClick = {this.hideModal.bind(this)} className = 'btn btn-ok'>CANCEL</button>
+          </div>
+        </div>
+      )
+    } else if (this.state.modalContent === 'remove') {
+      return (
+        <div>
+          <h3>You are really want to remove this record?</h3>
+          <br/>
+          <div className = 'row'>
+            <button onClick = {this.doRemove.bind(this, this.state.current_edit_record)} className = 'btn btn-danger'>REMOVE</button>
+            <button onClick = {this.hideModal.bind(this)} className = 'btn btn-ok'>CANCEL</button>
+          </div>
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 
   render() {

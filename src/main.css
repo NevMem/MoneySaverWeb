@@ -344,27 +344,27 @@ table {
     outline: none;
 }
 
-.btn-remove {
+.btn-danger {
     background-color: white;
     color: rgb(255, 102, 0);
     border-color: rgb(255, 102, 0);
     transition: all ease-in .2s;
 }
 
-.btn-remove:hover {
+.btn-danger:hover {
     background-color: rgb(255, 102, 0);
     color: white;
     border-color: rgb(255, 102, 0);
 }
 
-.btn-cancel {
+.btn-ok {
     background-color: rgb(47, 255, 109);
     border-color: rgb(47, 255, 109);
     color: white;
     transition: all ease-in .2s;
 }
 
-.btn-cancel:hover {
+.btn-ok:hover {
     background-color: white;
     border-color: rgb(47, 255, 109);
     color: rgb(47, 255, 109);
@@ -374,6 +374,21 @@ table {
     color: rgb(173, 173, 173);
     font-size: 20px;    
     cursor: pointer;
+}
+
+.edit-form input {
+    line-height: 30px;
+    font-size: 24px;
+    width: calc(100% - 14px);
+    padding: 4px 7px;
+    border: none;
+    border-bottom: 1px solid gray;
+    outline: none;
+}
+
+.edit-form .edit-form-input-group label {
+    font-size: 0.7em;
+    color: gray;
 }
 
 @media screen and (max-width: 1500px) {
