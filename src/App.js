@@ -27,7 +27,11 @@ class App extends Component {
       allWallets: [ 'Наличные', 'Сбербанк' ], 
       currentWallet: 0, 
       add_panel_error: '', 
-      add_panel_success: ''
+      add_panel_success: '', 
+
+      modalVisible: true, 
+      modalHeader: 'Some header', 
+      modalContent: 'Some info'
     }
   }
 
@@ -87,15 +91,19 @@ class App extends Component {
 
   validNumber(str) {
     if (str.length === 0) return true
+
+    let countDots = 0
+
     let first = 0
     if (str[0] === '-')
       first = 1
     for (let i = first; i < str.length; i++) {
-      if (!('0' <= str[i] && str[i] <= '9')) {
+      if (!(('0' <= str[i] && str[i] <= '9') || str[i] === '.')) {
         return false
       }
+      if (str[i] === '.') countDots += 1
     }
-    return true
+    return countDots <= 1
   }
 
   numberChanger(event) {
@@ -147,6 +155,16 @@ class App extends Component {
     })
   }
 
+  showModal() {
+    console.log('Showing modal')
+    this.setState({ modalVisible: true })
+  }
+
+  hideModal() {
+    console.log('Hiding modal')
+    this.setState({ modalVisible: false })
+  }
+
   render() {
     let data = []
 
@@ -183,6 +201,7 @@ class App extends Component {
 
     return (
       <div className = 'wrapper'>
+        {/* <ModalPopup open = {this.showModal.bind(this)} close = {this.hideModal.bind(this)} visible = {this.state.modalVisible} header = {this.state.modalHeader} content = {this.state.modalContent} /> */}
         <header>
           <h1>Money Saver</h1>
         </header>
@@ -192,8 +211,8 @@ class App extends Component {
               <div className = 'profile'>
                 <div className = 'info-part'>
                   <h1>Profile info</h1>
-                  <h2>Name: {this.props.first_name + ' ' + this.props.last_name}</h2>
-                  <h2>Login: {'@' + this.props.login}</h2>
+                  <h2>{this.props.first_name + ' ' + this.props.last_name}</h2>
+                  <h3 className = 'grayed'>{'@' + this.props.login}</h3>
                   <br/>
                   <button className = 'btn' onClick = {this.logout.bind(this)}>Logout</button>
                 </div>

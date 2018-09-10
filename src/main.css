@@ -278,6 +278,57 @@ table {
     margin-top: 6px;
 }
 
+.profile h2, .profile h3 {
+    line-height: 2em;
+}
+
+.grayed {
+    color: rgba(255, 255, 255, .5);
+}
+
+.modalWrapper {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    background-color: rgba(50, 50, 50, .7);
+    /* backdrop-filter: blur(0px); */
+}
+
+.modalFrame {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    box-shadow: 0px 3px 6px #292929;
+    color: black;
+
+    min-width: 600px;
+
+    display: grid;
+    grid-template-rows: 70px auto;
+}
+
+.modalHeader {
+    grid-row: 1;
+    line-height: 70px;
+    font-size: 24px;
+    color: white;
+    background-color: black;
+    padding: 0px 20px;
+}
+
+.modalContent {
+    grid-row: 2;
+    padding: 20px 20px;
+    background-color: white;
+    font-size: 1.2em;
+}
+
 @media screen and (max-width: 1500px) {
     .wrapper {
         grid-template-columns: repeat(3, 30px) repeat(10, 1fr) repeat(3, 30px);
@@ -297,8 +348,8 @@ table {
     }
 
     .profile .add-part {
-        padding-right: 20px;
-        padding-left: 20px;
+        padding-right: 0px;
+        padding-left: 0px;
     }
 
     .wrapper {
