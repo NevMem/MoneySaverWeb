@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Doughnut, Bar } from 'react-chartjs-2'
 import delete_icon from './delete-icon.svg'
+import ModalPopup from './components/ModalPopup'
 
 class App extends Component {
 
@@ -29,9 +30,9 @@ class App extends Component {
       add_panel_error: '', 
       add_panel_success: '', 
 
-      modalVisible: true, 
-      modalHeader: 'Some header', 
-      modalContent: 'Some info'
+      modalVisible: false, 
+      modalHeader: '-- TODO --', 
+      modalContent: '-- TODO --'
     }
   }
 
@@ -141,7 +142,7 @@ class App extends Component {
     }
   }
 
-  removeRecord(record, event) {
+  doRemove(record) {
     axios.post('/api/remove', { login: this.props.login, token: this.props.token, record_id: record._id }).then(data => data.data)
     .then(data => {
       if (data.err) {
@@ -155,6 +156,26 @@ class App extends Component {
     })
   }
 
+  removeRecord(record, event) {
+    event.preventDefault()
+    this.setState({ modalHeader: 'Edit', modalContent: (
+      <div>
+        <h3>You are really want to remove this record?</h3>
+        <br/>
+        <div className = 'row'>
+          <button onClick = {this.doRemove.bind(this, record)} className = 'btn btn-remove'>REMOVE</button>
+          <button onClick = {this.hideModal.bind(this)} className = 'btn btn-cancel'>CANCEL</button>
+        </div>
+      </div>
+    ) })
+    this.showModal()
+  }
+
+  editRecord(record, event) {
+    event.preventDefault()
+    alert('Sorry, this functionality is not ready now')
+  }
+
   showModal() {
     console.log('Showing modal')
     this.setState({ modalVisible: true })
@@ -163,6 +184,12 @@ class App extends Component {
   hideModal() {
     console.log('Hiding modal')
     this.setState({ modalVisible: false })
+  }
+
+  changeModalRender() {
+    return (
+      <div>{this.state.modalContent}</div>
+    )
   }
 
   render() {
@@ -201,7 +228,7 @@ class App extends Component {
 
     return (
       <div className = 'wrapper'>
-        {/* <ModalPopup open = {this.showModal.bind(this)} close = {this.hideModal.bind(this)} visible = {this.state.modalVisible} header = {this.state.modalHeader} content = {this.state.modalContent} /> */}
+        <ModalPopup renderContent = {this.changeModalRender.bind(this)} open = {this.showModal.bind(this)} close = {this.hideModal.bind(this)} visible = {this.state.modalVisible} header = {this.state.modalHeader} content = {this.state.modalContent} />
         <header>
           <h1>Money Saver</h1>
         </header>
@@ -260,7 +287,7 @@ class App extends Component {
               <div className = 'dashboard'>
                 <div className = 'info-table card'>
                   <div className = 'fullSum'>
-                    <div className = 'value'>{-this.props.fullSum} &#8381;</div>
+                    <div className = 'value'>{(-this.props.fullSum * 100 | 0) / 100.} &#8381;</div>
                     <div className = 'label'>Полный расход</div>
                   </div>
 
@@ -277,13 +304,20 @@ class App extends Component {
               <h2>Полная сумма по каждому тегу</h2>
               <br />
               <table className = 'main-info'>
-                <thead><tr><td>Тег</td><td>Сумма</td></tr></thead>
+                <thead>
+                  <tr>
+                    <td width = '33%'>Тег</td>
+                    <td width = '33%'>Сумма</td>
+                    <td width = '33%'>Средний расход в день</td>
+                  </tr>
+                </thead>
                 <tbody>
                   {data.map((el, key) => {
                     return (
                       <tr key = {key}>
                         <td>{el.label}</td>
                         <td>{el.value}</td>
+                        <td>{(el.value / this.props.countOfDays * 100 | 0) / 100.}</td>
                       </tr>
                     )
                 })}
@@ -325,6 +359,7 @@ class App extends Component {
                         <td>{el.value}</td>
                         <td>{tags}</td>
                         <td>{date}</td>
+                        <td><button className = 'edit-btn' onClick = {this.editRecord.bind(this, el)}>edit</button></td>
                         <td className = 'remove-btn'><img onClick = {this.removeRecord.bind(this, el)} src = {delete_icon} alt = 'delete' /></td>
                       </tr>
                     )

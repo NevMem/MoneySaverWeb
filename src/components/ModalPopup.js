@@ -12,8 +12,11 @@ class ModalPopup extends Component {
         return (
             <div className = 'modalWrapper'>
                 <div className = 'modalFrame'>
-                    <div onClick = {this.props.close} className = 'modalHeader'>{this.props.header}</div>
-                    <div className = 'modalContent'>{this.props.content}</div>
+                    <div className = 'modalHeader row'>
+                        <div>{this.props.header}</div>
+                        <div className = 'modal-close-btn' onClick = {this.props.close}>close</div>
+                    </div>
+                    <div className = 'modalContent'>{this.props.renderContent()}</div>
                 </div>
             </div>
         )

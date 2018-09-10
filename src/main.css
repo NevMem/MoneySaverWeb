@@ -329,6 +329,53 @@ table {
     font-size: 1.2em;
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.edit-btn {
+    border: none;
+    color: white;
+    background-color: transparent;
+    font-size: 1.2em;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-remove {
+    background-color: white;
+    color: rgb(255, 102, 0);
+    border-color: rgb(255, 102, 0);
+    transition: all ease-in .2s;
+}
+
+.btn-remove:hover {
+    background-color: rgb(255, 102, 0);
+    color: white;
+    border-color: rgb(255, 102, 0);
+}
+
+.btn-cancel {
+    background-color: rgb(47, 255, 109);
+    border-color: rgb(47, 255, 109);
+    color: white;
+    transition: all ease-in .2s;
+}
+
+.btn-cancel:hover {
+    background-color: white;
+    border-color: rgb(47, 255, 109);
+    color: rgb(47, 255, 109);
+}
+
+.modal-close-btn {
+    color: rgb(173, 173, 173);
+    font-size: 20px;    
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1500px) {
     .wrapper {
         grid-template-columns: repeat(3, 30px) repeat(10, 1fr) repeat(3, 30px);
