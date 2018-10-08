@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './main.css'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Doughnut, Bar } from 'react-chartjs-2'
+import { Doughnut, Bar, Line } from 'react-chartjs-2'
 import delete_icon from './delete-icon.svg'
 import ModalPopup from './components/ModalPopup'
 
@@ -136,7 +136,22 @@ class App extends Component {
     value = -value
 
     if (login && token && name && value) {
-      axios.post('/api/add', { login: login, token: token, wallet: wallet, tags: [ tag ], date: { year: year, month: month, day: day, hour: hour, minute: minute }, name: name, value: value }).then(data => data.data)
+      axios.post('/api/add', { 
+        login: login, 
+        token: token, 
+        wallet: wallet, 
+        tags: [ tag ], 
+        date: { 
+          year: year, 
+          month: month, 
+          day: day, 
+          hour: hour, 
+          minute: minute 
+        }, 
+        name: name, 
+        value: value 
+      })
+      .then(data => data.data)
       .then(data => {
         console.log(data)
         if (data.err) {
@@ -305,6 +320,21 @@ class App extends Component {
     barData = barData.slice(-7)
     barLabels = barLabels.slice(-7)
 
+    let prefDaySum = []
+    let prefDayLabels = []
+    let currentSum = 0
+    for (let elem in this.props.daySum) {
+      currentSum = (this.props.daySum[elem] * 100. | 0) / 100.
+      prefDaySum.push(currentSum)
+      prefDayLabels.push(elem)
+    }
+    prefDayLabels.reverse()
+    prefDaySum.reverse()
+    
+    for (let i = 1; i < prefDaySum.length; ++i) {
+      prefDaySum[i] += prefDaySum[i - 1]
+    }
+
     return (
       <div className = 'wrapper'>
         <ModalPopup renderContent = {this.changeModalRender.bind(this)} open = {this.showModal.bind(this)} close = {this.hideModal.bind(this)} visible = {this.state.modalVisible} header = {this.state.modalHeader} content = {this.state.modalContent} />
@@ -363,6 +393,26 @@ class App extends Component {
                   <button onClick = {this.addRecord.bind(this)} className = 'btn'>Добавить</button>
                 </div>
               </div>
+              {prefDayLabels.length > 0 && (
+                <div className = 'card'>
+                  <Line data = {{ 
+                    labels: prefDayLabels, 
+                    datasets: [{ 
+                      label: "Суммарный расход", 
+                      data: prefDaySum, 
+                      borderWidth: 3, 
+                      pointRadius: 1, 
+                      backgroundColor: 'rgba(0, 166, 237, 0.4)', 
+                      borderColor: '#00A6ED' 
+                    }] }} options = {{
+                      elements: {
+                        line: {
+                          tension: 0
+                        }
+                      }
+                    }} />
+                </div>
+              )}
               <div className = 'dashboard'>
                 <div className = 'info-table card'>
                   <div className = 'fullSum'>

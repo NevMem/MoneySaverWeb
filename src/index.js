@@ -22,7 +22,20 @@ let reducer = (state, action) => {
         localStorage.removeItem('token')
         localStorage.removeItem('first_name')
         localStorage.removeItem('last_name')
-        return { ...state, records: [], counter: {}, fullSum: 0, average: 0, countOfDays: 0, differentDays: new Set(), daySum: {}, login: undefined, token: undefined, first_name: undefined, last_name: undefined }
+        return { 
+            ...state, 
+            records: [], 
+            counter: {}, 
+            fullSum: 0, 
+            average: 0, 
+            countOfDays: 0, 
+            differentDays: new Set(), 
+            daySum: {}, 
+            login: undefined, 
+            token: undefined, 
+            first_name: undefined, 
+            last_name: undefined 
+        }
     } else if (action.type === 'ADD_RECORD') {
         let { record } = action.payload
         state = { ...state, records: [ ...state.records, record ] }
@@ -57,7 +70,17 @@ let reducer = (state, action) => {
     return state
 }
 
-const store = createStore(reducer, { records: [], counter: {}, fullSum: 0, average: 0, countOfDays: 0, differentDays: new Set(), daySum: {} }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const store = createStore(reducer, { 
+        records: [], 
+        counter: {}, 
+        fullSum: 0, 
+        average: 0, 
+        countOfDays: 0, 
+        differentDays: new Set(), 
+        daySum: {} 
+    }, 
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    )
 
 function loadData(login, token) {
     axios.post('/api/data', { token: token, login: login }).then(data => data.data)
