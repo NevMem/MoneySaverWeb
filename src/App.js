@@ -23,8 +23,9 @@ class App extends Component {
       day: current.getDate(), 
       hour: current.getHours(), 
       minute: current.getMinutes(), 
-      allTags: [ 'Еда', 'Транспорт', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
+      allTags: [ 'Еда', 'Транспорт', 'Одежда', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
       currentTag: 0, 
+      currentEditTag: 0, 
       allWallets: [ 'Наличные', 'Сбербанк' ], 
       currentWallet: 0, 
       add_panel_error: '', 
@@ -98,6 +99,10 @@ class App extends Component {
 
   onTagClick(index, event) {
     this.setState({ currentTag: index })
+  }
+
+  onEditTagClick(index, event) {
+    this.setState({ currentEditTag: index })
   }
 
   validNumber(str) {
@@ -183,8 +188,31 @@ class App extends Component {
 
   doChange(event) {
     event.preventDefault()
-    
-    alert('This option is not ready now. I am so sorry for that')
+
+    let token = this.props.token, login = this.props.login
+    let name = this.state.edit_name
+    let wallet = this.state.current_edit_record.wallet
+    let value = this.state.edit_value
+    let tags = [ this.state.allTags[this.state.currentEditTag] ]
+    let id = this.state.current_edit_record._id
+    let date = {
+      year: this.state.edit_year, 
+      month: this.state.edit_month, 
+      day: this.state.edit_day, 
+      hour: this.state.edit_hour, 
+      minute: this.state.edit_minute
+    }
+
+    axios.post('/api/edit', {
+      token, login, name, date, value: -parseInt(value, 10), wallet, tags, id
+    }).then(data => data.data)
+    .then(data => {
+      if (data.err) {
+        console.log(data.err)
+      } else {
+        alert('All is ok')
+      }
+    })
   }
 
   removeRecord(record, event) {
@@ -196,6 +224,9 @@ class App extends Component {
   editRecord(record, event) {
     event.preventDefault()
     console.log(record)
+    let ncurTag = 0
+    if (this.state.allTags.indexOf(record.tags[0]) !== -1)
+      ncurTag = this.state.allTags.indexOf(record.tags[0])
     this.setState({ 
       modalHeader: 'Edit record', 
       edit_year: record.date.year, 
@@ -204,6 +235,7 @@ class App extends Component {
       edit_hour: record.date.hour, 
       edit_minute: record.date.minute, 
       current_edit_record: record, 
+      currentEditTag: ncurTag, 
       edit_name: record.name, 
       edit_value: -record.value, 
       modalContent: 'edit' 
@@ -225,8 +257,7 @@ class App extends Component {
     if (this.state.modalContent === 'edit') {
       return (
         <div>
-          <h3>You can change fields here</h3>
-          <br/>
+          <h3>You can edit record here</h3>
           <div className = 'edit-form'>
             <div className = 'edit-form-input-group'>
               <label>Название</label>
@@ -235,6 +266,14 @@ class App extends Component {
             <div className = 'edit-form-input-group'>
               <label>Стоимость</label>
               <input id = 'edit_value' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_value} />
+            </div>
+            <div className = 'tags edit-tags'>
+              { this.state.allTags.map((el, index) => {
+                let clss = 'tag edit-tag'
+                if (index === this.state.currentEditTag)
+                  clss += ' active-tag'
+                return <div onClick = {this.onEditTagClick.bind(this, index)} className = {clss} key = {index}>{el}</div>
+              }) }
             </div>
             <div className = 'row'>
               <div className = 'edit-form-input-group'>

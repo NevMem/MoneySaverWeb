@@ -16,7 +16,7 @@ html {
     display: grid;
 
     grid-template-columns: repeat(16, 1fr);
-    grid-template-rows: 90px auto 70px;
+    grid-template-rows: 70px auto 70px;
 
     grid-gap: 10px;
     padding-top: 10px;
@@ -24,11 +24,11 @@ html {
 
 header {
     grid-row: 1;
-    grid-column: 4 / 14;
+    grid-column: 3 / 15;
     background-color: #7a0099;
     line-height: 70px;
 
-    padding: 10px 10px;
+    padding: 0px 10px;
 }
 
 header h1 {
@@ -37,7 +37,7 @@ header h1 {
 
 main {
     grid-row: 2;
-    grid-column: 4 / 14;
+    grid-column: 3 / 15;
 }
 
 .login-form {
@@ -73,16 +73,22 @@ main {
     padding: 10px 10px;
     margin: 0px 0px;
     font-size: 22px;
-    border: 1px solid #7A0099;
+    /* border: 1px solid #7A0099; */
+    border: 1px solid #454545;
     background-color: transparent;
     color: white;
     cursor: pointer;
     outline: none;
+    transition: all ease-in .2s;
+}
+
+.btn:hover {
+    box-shadow: 0px 0px 1px #454545;
 }
 
 footer {
     grid-row: 3;
-    grid-column: 4 / 14;
+    grid-column: 3 / 15;
 }
 
 .records {
@@ -115,7 +121,8 @@ table {
 .profile {
     font-weight: 200;
     padding: 20px 20px;
-    background-color: #3a0c46;
+    /* background-color: #3a0c46; */
+    background-color: #292929;
 
     display: grid;
     grid-template-columns: 1fr 5fr;
@@ -124,8 +131,10 @@ table {
 .profile .add-part {
     display: flex;
     flex-direction: column;
-    padding-left: calc(50% - 340px);
-    padding-right: calc(50% - 340px);
+    /* padding-left: calc(50% - 340px);
+    padding-right: calc(50% - 340px); */
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .profile .add-part * {
@@ -139,7 +148,8 @@ table {
     color: white;
 
     border: none;
-    background-color: rgb(73, 20, 87);
+    /* background-color: rgb(73, 20, 87); */
+    background-color: #363636;
 }
 
 .profile h2, .profile h1 {
@@ -208,13 +218,41 @@ table {
     border-radius: 20px;
     padding: 10px 20px;
     margin-right: 10px;
-    background-color: #491457;
+    background-color: #2e2e2e;
     font-weight: 400;
     cursor: pointer;
 }
 
+.edit-tags {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.edit-tag {
+    background-color: transparent;
+    border: 1px solid rgb(98, 98, 98);
+    color: rgb(98, 98, 98);
+    margin-top: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 4px;
+    font-weight: 200;
+}
+
 .tag.active-tag {
-    background-color: #7A0099;
+    background-color: #393939;
+}
+
+.edit-tag.active-tag {
+    background-color: transparent;
+    border: 1px solid rgb(98, 98, 98);
+    color: white;
+    background-color: rgb(98, 98, 98);
+    margin-top: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 4px;
+    font-weight: 200;
 }
 
 .wallet {
@@ -222,7 +260,8 @@ table {
     padding: 7px 12px;
     font-size: 20px;
     border: none;
-    background-color: #491457;
+    /* background-color: #491457; */
+    background-color: #393939;
     color: white;
     cursor: pointer;
 }
