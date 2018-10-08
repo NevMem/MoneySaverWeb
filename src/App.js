@@ -26,7 +26,7 @@ class App extends Component {
       allTags: [ 'Еда', 'Транспорт', 'Одежда', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
       currentTag: 0, 
       currentEditTag: 0, 
-      allWallets: [ 'Наличные', 'Сбербанк' ], 
+      allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ], 
       currentWallet: 0, 
       add_panel_error: '', 
       add_panel_success: '', 
