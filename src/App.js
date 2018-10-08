@@ -23,7 +23,7 @@ class App extends Component {
       day: current.getDate(), 
       hour: current.getHours(), 
       minute: current.getMinutes(), 
-      allTags: [ 'Еда', 'Транспорт', 'Одежда', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
+      allTags: [ 'Еда', 'Транспорт', 'Проживание', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
       currentTag: 0, 
       currentEditTag: 0, 
       allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ], 
@@ -95,7 +95,7 @@ class App extends Component {
     this.props.dispatch({ type: 'LOGGED_OUT', payload: {} })
   }
 
-  allColors = [ '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12', '#FF206E', '#5C80BC', 'F0E100' ]
+  allColors = [ '#FF206E', '#5C80BC', '#4CB944', '#A2D729', '#F0E100', '#F7CB15', '#F55D3E', '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12' ]
 
   onTagClick(index, event) {
     this.setState({ currentTag: index })
