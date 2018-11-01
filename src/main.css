@@ -474,3 +474,32 @@ table {
         width: calc(100% - 20px);
     }
 }
+
+.historyRange {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.historyRange div.ranger {
+    padding: 7px 14px;
+    border: 1px solid rgb(50, 50, 50);
+    cursor: pointer;
+}
+
+div.ranger:first-child {
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+
+div.ranger:last-child {
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+div.ranger.active {
+    /* background-color: rgb(199, 73, 0); */
+    background-color: #04E762;
+    color: black;
+}

@@ -23,7 +23,7 @@ class App extends Component {
       day: current.getDate(), 
       hour: current.getHours(), 
       minute: current.getMinutes(), 
-      allTags: [ 'Еда', 'Транспорт', 'Проживание', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
+      allTags: [ 'Еда', 'Транспорт', 'Проживание', 'Электроника', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
       currentTag: 0, 
       currentEditTag: 0, 
       allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ], 
@@ -42,7 +42,10 @@ class App extends Component {
       edit_month: -1, 
       edit_hour: -1, 
       edit_minute: -1, 
-      current_edit_record: undefined
+      current_edit_record: undefined, 
+
+      historyLenghts: [ 7, 14, 21, 28, 56, 28 * 4 ],
+      currentHistoryLengthIndex: 0
     }
   }
 
@@ -95,7 +98,7 @@ class App extends Component {
     this.props.dispatch({ type: 'LOGGED_OUT', payload: {} })
   }
 
-  allColors = [ '#FF206E', '#5C80BC', '#4CB944', '#A2D729', '#F0E100', '#F7CB15', '#F55D3E', '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12' ]
+  allColors = [ '#7678ED', '#04E762', '#FF206E', '#5C80BC', '#4CB944', '#A2D729', '#F0E100', '#F7CB15', '#F55D3E', '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12' ]
 
   onTagClick(index, event) {
     this.setState({ currentTag: index })
@@ -140,7 +143,7 @@ class App extends Component {
     
     value = -value
 
-    if (login && token && name && value) {
+    if (login && token && name && value !== undefined) {
       axios.post('/api/add', { 
         login: login, 
         token: token, 
@@ -325,6 +328,13 @@ class App extends Component {
     }
   }
 
+  changeHistoryLengthIndex(index, event) {
+    event.preventDefault()
+    this.setState({
+      currentHistoryLengthIndex: index
+    })
+  }
+
   render() {
     let data = []
 
@@ -356,8 +366,8 @@ class App extends Component {
     barData.reverse()
     barLabels.reverse()
 
-    barData = barData.slice(-7)
-    barLabels = barLabels.slice(-7)
+    barData = barData.slice(-this.state.historyLenghts[this.state.currentHistoryLengthIndex])
+    barLabels = barLabels.slice(-this.state.historyLenghts[this.state.currentHistoryLengthIndex])
 
     let prefDaySum = []
     let prefDayLabels = []
@@ -372,6 +382,10 @@ class App extends Component {
     
     for (let i = 1; i < prefDaySum.length; ++i) {
       prefDaySum[i] += prefDaySum[i - 1]
+    }
+
+    for (let i = 0; i < prefDaySum.length; ++i) {
+      prefDaySum[i] /= (i + 1)
     }
 
     return (
@@ -437,11 +451,11 @@ class App extends Component {
                   <Line data = {{ 
                     labels: prefDayLabels, 
                     datasets: [{ 
-                      label: "Суммарный расход", 
+                      label: "Средний расход", 
                       data: prefDaySum, 
                       borderWidth: 3, 
                       pointRadius: 1, 
-                      backgroundColor: 'rgba(0, 166, 237, 0.4)', 
+                      backgroundColor: 'rgba(0, 166, 237, 0.05)', 
                       borderColor: '#00A6ED' 
                     }] }} options = {{
                       elements: {
@@ -463,8 +477,21 @@ class App extends Component {
                     <div className = 'value'>{-this.props.average} &#8381;</div>
                     <div className = 'label'>Средний ежесуточный расход</div>
                   </div>
-                  
-                  {barData.length > 0 && <Bar data = {{ labels: barLabels, datasets: [{ data: barData, label: 'Расходы', backgroundColor: '#7A0099' }] }} /> }
+                  {barData.length > 0 && (
+                    <div>
+                      <div className = 'historyRange'>
+                        {this.state.historyLenghts.map((el, index) => {
+                          let currentClass = 'ranger'
+                          if (index === this.state.currentHistoryLengthIndex)
+                            currentClass += ' active'
+                          return (
+                            <div onClick = {this.changeHistoryLengthIndex.bind(this, index)} key = {index} className = {currentClass}>{el} Days</div>
+                          )
+                        })}
+                      </div>
+                      <Bar data = {{ labels: barLabels, datasets: [{ data: barData, label: 'Расходы', backgroundColor: '#04E762' }] }} />
+                    </div>
+                  )}
                 </div>
                 {labels.length > 0 && <div className = 'card'><Doughnut width = '200px' height = '200px' data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
               </div>
