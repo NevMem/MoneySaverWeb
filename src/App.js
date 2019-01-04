@@ -23,7 +23,7 @@ class App extends Component {
       day: current.getDate(), 
       hour: current.getHours(), 
       minute: current.getMinutes(), 
-      allTags: [ 'Еда', 'Транспорт', 'Проживание', 'Электроника', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
+      allTags: [ 'Еда', 'Транспорт', 'Медиа', 'Проживание', 'Электроника', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
       currentTag: 0, 
       currentEditTag: 0, 
       allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ], 
@@ -44,7 +44,7 @@ class App extends Component {
       edit_minute: -1, 
       current_edit_record: undefined, 
 
-      historyLenghts: [ 7, 14, 21, 28, 56, 28 * 4 ],
+      historyLenghts: [ 7, 14, 21, 28, 56, 28 * 4, 365 ],
       currentHistoryLengthIndex: 0
     }
   }
@@ -89,7 +89,7 @@ class App extends Component {
 
   getDate(date) {
     let ret = ''
-    ret += this.norm(date.day) + ':' + this.norm(date.month) + ':' + date.year + ' '
+    ret += this.norm(date.day) + '.' + this.norm(date.month) + '.' + date.year + ' '
     ret += date.hour + ':' + this.norm(date.minute)
     return ret
   }
@@ -493,7 +493,7 @@ class App extends Component {
                     </div>
                   )}
                 </div>
-                {labels.length > 0 && <div className = 'card'><Doughnut width = '200px' height = '200px' data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
+                {labels.length > 0 && <div className = 'card'><Doughnut height = {200} width = {200} data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
               </div>
               <br />
               <h2>Полная сумма по каждому тегу</h2>
