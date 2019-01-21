@@ -454,7 +454,8 @@ table {
     }
 
     .wrapper {
-        grid-template-columns: repeat(3, 3px) repeat(10, 1fr) repeat(3, 3px);
+        grid-template-columns: repeat(3, 5px) repeat(10, 1fr) repeat(3, 5px);
+        grid-gap: 0px;
     }
 
     .login-form {
