@@ -22,3 +22,5 @@ yarn-error.log*
 
 deploy.cmd
 deploy.rar
+
+package-lock.json
