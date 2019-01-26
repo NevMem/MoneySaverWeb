@@ -150,7 +150,7 @@ let reducer = (state, action) => {
     } else if (action.type === 'BATCH_ADD') {
         let records = action.payload
         for (let i = 0; i != records.length; ++i) {
-            if (!record[i].tags) record[i].tags = [ "Not set" ]
+            if (!records[i].tags) records[i].tags = [ "Not set" ]
         }
         state = { ...state, records: [...state.records, ...records] }
         for (let i = 0; i !== records.length; ++i) {
