@@ -201,9 +201,9 @@ let reducer = (state, action) => {
             let second_buffer = second[0].split('-')
             let first_date = { year: parseInt(first_buffer[0], 10), month: parseInt(first_buffer[1], 10), day: parseInt(first_buffer[2], 10) }
             let second_date = { year: parseInt(second_buffer[0], 10), month: parseInt(second_buffer[1], 10), day: parseInt(second_buffer[2], 10) }
-            if (utils.__is_before(first_date, second_date))
+            if (__is_before(first_date, second_date))
                 return -1
-            if (utils.__is_to_day_equal(first_date, second_date))
+            if (__is_to_day_equal(first_date, second_date))
                 return 0
             return 1
         })
