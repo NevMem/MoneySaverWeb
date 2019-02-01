@@ -207,7 +207,7 @@ class App extends Component {
     }
 
     axios.post('/api/edit', {
-      token, login, name, date, value: -parseInt(value, 10), wallet, tags, id
+      token, login, name, date, value: -value, wallet, tags, id
     }).then(data => data.data)
     .then(data => {
       if (data.err) {
