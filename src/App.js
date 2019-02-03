@@ -140,6 +140,11 @@ class App extends Component {
     let { name, value, year, month, day, hour, minute } = this.state
     let wallet = this.state.allWallets[this.state.currentWallet]
     let tag = this.state.allTags[this.state.currentTag]
+
+    this.setState({
+      add_panel_error: '',
+      add_panel_success: '',
+    })
     
     value = -value
 
@@ -150,11 +155,11 @@ class App extends Component {
         wallet: wallet, 
         tags: [ tag ], 
         date: { 
-          year: year, 
-          month: month, 
-          day: day, 
-          hour: hour, 
-          minute: minute 
+          year: parseInt(year), 
+          month: parseInt(month), 
+          day: parseInt(day), 
+          hour: parseInt(hour), 
+          minute: parseInt(minute)
         }, 
         name: name, 
         value: value 
@@ -162,10 +167,16 @@ class App extends Component {
       .then(data => data.data)
       .then(data => {
         console.log(data)
-        if (data.err) {
-          this.setState({ add_panel_error: data.err })
+        if (data.type === undefined) {
+          this.setState({ add_panel_error: 'Server reponse has unknown format' })
         } else {
-          this.setState({ add_panel_success: 'Record was successfully added' })
+          if (data.type === 'error') {
+            this.setState({ add_panel_error: data.error })
+          } else if (data.type === 'ok') {
+            this.setState({ add_panel_success: 'Record was succsessfully added' })
+          } else {
+            this.setState({ add_panel_error: 'Server reponse has unknown format' })
+          }
         }
       }).catch(err => {
         this.setState({ add_panel_error: err })
@@ -210,10 +221,16 @@ class App extends Component {
       token, login, name, date, value: -value, wallet, tags, id
     }).then(data => data.data)
     .then(data => {
-      if (data.err) {
-        console.log(data.err)
+      if (data.type === undefined) {
+        alert('Server response has unknown format')
       } else {
-        alert('All is ok')
+        if (data.type === 'error') {
+          alert('Error happened: ' + data.error)
+        } else if (data.type === 'ok') {
+          alert('Record was successfully changed')
+        } else {
+          alert('Server reponse has unknown format')
+        }
       }
     })
   }
