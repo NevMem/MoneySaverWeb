@@ -162,20 +162,21 @@ class App extends Component {
           minute: parseInt(minute)
         }, 
         name: name, 
-        value: value 
+        value: value,
+        daily: true
       })
       .then(data => data.data)
       .then(data => {
         console.log(data)
         if (data.type === undefined) {
-          this.setState({ add_panel_error: 'Server reponse has unknown format' })
+          this.setState({ add_panel_error: 'Server response has unknown format' })
         } else {
           if (data.type === 'error') {
             this.setState({ add_panel_error: data.error })
           } else if (data.type === 'ok') {
-            this.setState({ add_panel_success: 'Record was succsessfully added' })
+            this.setState({ add_panel_success: 'Record was successfully added' })
           } else {
-            this.setState({ add_panel_error: 'Server reponse has unknown format' })
+            this.setState({ add_panel_error: 'Server response has unknown format' })
           }
         }
       }).catch(err => {
@@ -218,7 +219,7 @@ class App extends Component {
     }
 
     axios.post('/api/edit', {
-      token, login, name, date, value: -value, wallet, tags, id
+      token, login, name, date, value: -value, wallet, tags, id, daily: true
     }).then(data => data.data)
     .then(data => {
       if (data.type === undefined) {
