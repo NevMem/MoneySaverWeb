@@ -155,11 +155,11 @@ class App extends Component {
         wallet: wallet, 
         tags: [ tag ], 
         date: { 
-          year: parseInt(year), 
-          month: parseInt(month), 
-          day: parseInt(day), 
-          hour: parseInt(hour), 
-          minute: parseInt(minute)
+          year: parseInt(year, 10), 
+          month: parseInt(month, 10), 
+          day: parseInt(day, 10), 
+          hour: parseInt(hour, 10), 
+          minute: parseInt(minute, 10)
         }, 
         name: name, 
         value: value,
@@ -413,184 +413,172 @@ class App extends Component {
           <h1>Money Saver</h1>
         </header>
         <main>
-          {this.props.token ? (
-            <div className = 'content'>
-              <div className = 'profile'>
-                <div className = 'info-part'>
-                  <h1>Profile info</h1>
-                  <h2>{this.props.first_name + ' ' + this.props.last_name}</h2>
-                  <h3 className = 'grayed'>{'@' + this.props.login}</h3>
-                  <br/>
-                  <button className = 'btn' onClick = {this.logout.bind(this)}>Logout</button>
-                </div>
-
-                <div className = 'add-part'>
-                  {this.state.add_panel_error && <h4 className = 'error'>{this.state.add_panel_error}</h4>}
-                  {this.state.add_panel_success && <h4 className = 'success'>{this.state.add_panel_success}</h4>}
-                  <div className = 'input-block'>
-                    <div className = 'input-label'>Название</div>
-                    <input onChange = {this.inputChange.bind(this)} value = {this.state.name} id = 'name' type = 'text' autoComplete = 'false' />
-                  </div>
-                  <div className = 'input-block'>
-                    <div className = 'input-label'>Стоимость</div>
-                    <input onChange = {this.numberChanger.bind(this)} value = {this.state.value} id = 'value' type = 'text' autoComplete = 'false' />
-                  </div>
-                  <div className = 'input-label'>Теги</div>
-                  <div className = 'tags'>
-                    {this.state.allTags.map((el, key) => {
-                      let cls = 'tag'
-                      if (key === this.state.currentTag)
-                        cls += ' active-tag'
-                      return (
-                        <div onClick = {this.onTagClick.bind(this, key)} className = {cls} key = {key}>{el}</div>
-                      )
-                    })}
-                  </div>
-                  <select onChange = {this.changeSelect.bind(this)} value = {this.state.allWallets[this.state.currentWallet]} className = 'wallet' name = 'wallet'>
-                    {this.state.allWallets.map((el, key) => {
-                      return (
-                        <option key = {key}>{el}</option>
-                      )
-                    })}
-                  </select>
-                  <div className = 'input-label'>Время</div>
-                  <div className = 'date-block'>
-                    <input onChange = {this.numberChanger.bind(this)} value = {this.state.year} placeholder = 'year' type = 'text' id = 'year' />
-                    <input onChange = {this.numberChanger.bind(this)} value = {this.state.month} placeholder = 'month' type = 'text' id = 'month' />
-                    <input onChange = {this.numberChanger.bind(this)} value = {this.state.day} placeholder = 'day' type = 'text' id = 'day' />
-                    <input onChange = {this.numberChanger.bind(this)} value = {this.state.hour} placeholder = 'hour' type = 'text' id = 'hour' />
-                    <input onChange = {this.numberChanger.bind(this)} value = {this.state.minute} placeholder = 'minute' type = 'text' id = 'minute' />
-                  </div>
-                  <button onClick = {this.addRecord.bind(this)} className = 'btn'>Добавить</button>
-                </div>
+          <div className = 'content'>
+            <div className = 'profile'>
+              <div className = 'info-part'>
+                <h1>Profile info</h1>
+                <h2>{this.props.first_name + ' ' + this.props.last_name}</h2>
+                <h3 className = 'grayed'>{'@' + this.props.login}</h3>
+                <br/>
+                <button className = 'btn' onClick = {this.logout.bind(this)}>Logout</button>
               </div>
-              {prefDayLabels.length > 0 && (
-                <div className = 'card'>
-                  <Line data = {{ 
-                    labels: prefDayLabels, 
-                    datasets: [{ 
-                      label: "Средний расход", 
-                      data: prefDaySum, 
-                      borderWidth: 3, 
-                      pointRadius: 1, 
-                      backgroundColor: 'rgba(0, 166, 237, 0.05)', 
-                      borderColor: '#00A6ED' 
-                    }] }} options = {{
-                      elements: {
-                        line: {
-                          tension: 0
-                        }
-                      }
-                    }} />
+
+              <div className = 'add-part'>
+                {this.state.add_panel_error && <h4 className = 'error'>{this.state.add_panel_error}</h4>}
+                {this.state.add_panel_success && <h4 className = 'success'>{this.state.add_panel_success}</h4>}
+                <div className = 'input-block'>
+                  <div className = 'input-label'>Название</div>
+                  <input onChange = {this.inputChange.bind(this)} value = {this.state.name} id = 'name' type = 'text' autoComplete = 'false' />
                 </div>
-              )}
-              <div className = 'dashboard'>
-                <div className = 'info-table card'>
-                  <div className = 'fullSum'>
-                    <div className = 'value'>{(-this.props.fullSum * 100 | 0) / 100.} &#8381;</div>
-                    <div className = 'label'>Полный расход</div>
-                  </div>
-
-                  <div className = 'average'>
-                    <div className = 'value'>{-this.props.average} &#8381;</div>
-                    <div className = 'label'>Средний ежесуточный расход</div>
-                  </div>
-                  {barData.length > 0 && (
-                    <div>
-                      <div className = 'historyRange'>
-                        {this.state.historyLenghts.map((el, index) => {
-                          let currentClass = 'ranger'
-                          if (index === this.state.currentHistoryLengthIndex)
-                            currentClass += ' active'
-                          return (
-                            <div onClick = {this.changeHistoryLengthIndex.bind(this, index)} key = {index} className = {currentClass}>{el} Days</div>
-                          )
-                        })}
-                      </div>
-                      <Bar data = {{ labels: barLabels, datasets: [{ data: barData, label: 'Расходы', backgroundColor: '#04E762' }] }} />
-                    </div>
-                  )}
+                <div className = 'input-block'>
+                  <div className = 'input-label'>Стоимость</div>
+                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.value} id = 'value' type = 'text' autoComplete = 'false' />
                 </div>
-                {labels.length > 0 && <div className = 'card'><Doughnut height = {200} width = {200} data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
-              </div>
-              <br />
-              <h2>Полная сумма по каждому тегу</h2>
-              <br />
-              <table className = 'main-info'>
-                <thead>
-                  <tr>
-                    <td width = '33%'>Тег</td>
-                    <td width = '33%'>Сумма</td>
-                    <td width = '33%'>Средний расход в день</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((el, key) => {
+                <div className = 'input-label'>Теги</div>
+                <div className = 'tags'>
+                  {this.state.allTags.map((el, key) => {
+                    let cls = 'tag'
+                    if (key === this.state.currentTag)
+                      cls += ' active-tag'
                     return (
-                      <tr key = {key}>
-                        <td>{el.label}</td>
-                        <td>{el.value}</td>
-                        <td>{(el.value / this.props.countOfDays * 100 | 0) / 100.}</td>
-                      </tr>
-                    )
-                })}
-                </tbody>
-              </table>
-
-              <br />
-              <h2>Последение действия</h2>
-              <br />
-
-              <table className = 'records'>
-                <thead>
-                  <tr>
-                    <td>Wallet</td>
-                    <td>Name</td>
-                    <td>Value</td>
-                    <td>Tags</td>
-                    <td>Date</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.props.records.map((el, key) => {
-                    let cls = 'increase'
-                    if (el.value < 0)
-                      cls = 'decrease'
-
-                    let tags = 'no tags'
-                    let date = 'not specified'
-
-                    if (el.tags)
-                      tags = el.tags
-                    if (el.date)
-                      date = this.getDate(el.date)
-                    
-                    return (
-                      <tr className = {cls} key = {key}>
-                        <td>{el.wallet}</td>
-                        <td>{el.name}</td>
-                        <td>{el.value}</td>
-                        <td>{tags}</td>
-                        <td>{date}</td>
-                        <td><button className = 'edit-btn' onClick = {this.editRecord.bind(this, el)}>edit</button></td>
-                        <td className = 'remove-btn'><img onClick = {this.removeRecord.bind(this, el)} src = {delete_icon} alt = 'delete' /></td>
-                      </tr>
+                      <div onClick = {this.onTagClick.bind(this, key)} className = {cls} key = {key}>{el}</div>
                     )
                   })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <form className = 'login-form'>
-              <h2>Please login:</h2>
-              <input id = 'login' type = 'text' placeholder = 'Login' value = {this.state.login} onChange = {this.inputChange.bind(this)} />
-              <input id = 'password' type = 'password' placeholder = 'Password' value = {this.state.password} onChange = {this.inputChange.bind(this)} />
-              <div className = 'buttons'>
-                <button className = 'btn' onClick = {this.login.bind(this)}>Login</button>
-                <button className = 'btn' onClick = {this.register.bind(this)}>Register</button>
+                </div>
+                <select onChange = {this.changeSelect.bind(this)} value = {this.state.allWallets[this.state.currentWallet]} className = 'wallet' name = 'wallet'>
+                  {this.state.allWallets.map((el, key) => {
+                    return (
+                      <option key = {key}>{el}</option>
+                    )
+                  })}
+                </select>
+                <div className = 'input-label'>Время</div>
+                <div className = 'date-block'>
+                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.year} placeholder = 'year' type = 'text' id = 'year' />
+                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.month} placeholder = 'month' type = 'text' id = 'month' />
+                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.day} placeholder = 'day' type = 'text' id = 'day' />
+                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.hour} placeholder = 'hour' type = 'text' id = 'hour' />
+                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.minute} placeholder = 'minute' type = 'text' id = 'minute' />
+                </div>
+                <button onClick = {this.addRecord.bind(this)} className = 'btn'>Добавить</button>
               </div>
-            </form>
-          )}
+            </div>
+            {prefDayLabels.length > 0 && (
+              <div className = 'card'>
+                <Line data = {{ 
+                  labels: prefDayLabels, 
+                  datasets: [{ 
+                    label: "Средний расход", 
+                    data: prefDaySum, 
+                    borderWidth: 3, 
+                    pointRadius: 1, 
+                    backgroundColor: 'rgba(0, 166, 237, 0.05)', 
+                    borderColor: '#00A6ED' 
+                  }] }} options = {{
+                    elements: {
+                      line: {
+                        tension: 0
+                      }
+                    }
+                  }} />
+              </div>
+            )}
+            <div className = 'dashboard'>
+              <div className = 'info-table card'>
+                <div className = 'fullSum'>
+                  <div className = 'value'>{(-this.props.fullSum * 100 | 0) / 100.} &#8381;</div>
+                  <div className = 'label'>Полный расход</div>
+                </div>
+
+                <div className = 'average'>
+                  <div className = 'value'>{-this.props.average} &#8381;</div>
+                  <div className = 'label'>Средний ежесуточный расход</div>
+                </div>
+                {barData.length > 0 && (
+                  <div>
+                    <div className = 'historyRange'>
+                      {this.state.historyLenghts.map((el, index) => {
+                        let currentClass = 'ranger'
+                        if (index === this.state.currentHistoryLengthIndex)
+                          currentClass += ' active'
+                        return (
+                          <div onClick = {this.changeHistoryLengthIndex.bind(this, index)} key = {index} className = {currentClass}>{el} Days</div>
+                        )
+                      })}
+                    </div>
+                    <Bar data = {{ labels: barLabels, datasets: [{ data: barData, label: 'Расходы', backgroundColor: '#04E762' }] }} />
+                  </div>
+                )}
+              </div>
+              {labels.length > 0 && <div className = 'card'><Doughnut height = {200} width = {200} data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
+            </div>
+            <br />
+            <h2>Полная сумма по каждому тегу</h2>
+            <br />
+            <table className = 'main-info'>
+              <thead>
+                <tr>
+                  <td width = '33%'>Тег</td>
+                  <td width = '33%'>Сумма</td>
+                  <td width = '33%'>Средний расход в день</td>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((el, key) => {
+                  return (
+                    <tr key = {key}>
+                      <td>{el.label}</td>
+                      <td>{el.value}</td>
+                      <td>{(el.value / this.props.countOfDays * 100 | 0) / 100.}</td>
+                    </tr>
+                  )
+              })}
+              </tbody>
+            </table>
+
+            <br />
+            <h2>Последение действия</h2>
+            <br />
+
+            <table className = 'records'>
+              <thead>
+                <tr>
+                  <td>Wallet</td>
+                  <td>Name</td>
+                  <td>Value</td>
+                  <td>Tags</td>
+                  <td>Date</td>
+                </tr>
+              </thead>
+              <tbody>
+                {this.props.records.map((el, key) => {
+                  let cls = 'increase'
+                  if (el.value < 0)
+                    cls = 'decrease'
+
+                  let tags = 'no tags'
+                  let date = 'not specified'
+
+                  if (el.tags)
+                    tags = el.tags
+                  if (el.date)
+                    date = this.getDate(el.date)
+                  
+                  return (
+                    <tr className = {cls} key = {key}>
+                      <td>{el.wallet}</td>
+                      <td>{el.name}</td>
+                      <td>{el.value}</td>
+                      <td>{tags}</td>
+                      <td>{date}</td>
+                      <td><button className = 'edit-btn' onClick = {this.editRecord.bind(this, el)}>edit</button></td>
+                      <td className = 'remove-btn'><img onClick = {this.removeRecord.bind(this, el)} src = {delete_icon} alt = 'delete' /></td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </main>
         <footer>
             Footer // to do

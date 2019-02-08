@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux' 
 import { createStore } from 'redux'
 import axios from 'axios'
+import LoginPage from './LoginPage'
 
 let codeDay = (date) => {
     return date.year + '-' + date.month + '-' + date.day
@@ -149,7 +150,7 @@ let reducer = (state, action) => {
         return state
     } else if (action.type === 'BATCH_ADD') {
         let records = action.payload
-        for (let i = 0; i != records.length; ++i) {
+        for (let i = 0; i !== records.length; ++i) {
             if (!records[i].tags) records[i].tags = [ "Not set" ]
         }
         state = { ...state, records: [...state.records, ...records] }
@@ -239,9 +240,6 @@ function loadData(login, token) {
     .then(data => {
         console.info('Loading data comsumed', Date.now() - __start)
         let start = Date.now()
-        /* for (let el of data) {
-            store.dispatch({ type: 'ADD_RECORD', payload: { record: el } })
-        }*/
         store.dispatch({ type: 'BATCH_ADD', payload: data })
         console.info('Adding all records consumed', Date.now() - start, 'milliseconds')
     }).catch(err => {
@@ -254,10 +252,21 @@ if (token) {
     store.dispatch({ type: 'LOGGED_IN', payload: { login: login, token: token, first_name: first_name, last_name: last_name } })
 }
 
+const AuthenticatedRoute = ({component: Component, ...rest}) => (
+    <Route {...rest} render={(props) => ( props.token !== undefined ? <Component {...props} /> : <Redirect to ='/' /> )} />
+)
+
+const Router = () => (
+    <div>
+        <Route path = '/' component = {LoginPage} />
+        <AuthenticatedRoute path = '/home' component = {App} />
+    </div>
+)
+
 ReactDOM.render(
     <BrowserRouter>
         <Provider store = {store}>
-            <Route path = '/' component = {App} />
+            <Router/>
         </Provider>
     </BrowserRouter>
     , document.getElementById('root'));
