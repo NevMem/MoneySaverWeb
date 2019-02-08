@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-// import 
+import { connect } from 'react-redux'
+import axios from 'axios'
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
   constructor(prps) {
     super(prps)
     this.state = {
@@ -15,12 +16,31 @@ export default class LoginPage extends Component {
     this.forceUpdate()
   }
 
-  login() {
+  login(event) {
+    event.preventDefault()
+    axios.post('/api/login', { login: this.state.login, password: this.state.password }).then(data => data.data).then(data => {
+      if (data.err) {
+        alert(data.err)
+      } else {
+        let { token, last_name, first_name, login } = data
 
+        localStorage.setItem('login', login)
+        localStorage.setItem('last_name', last_name)
+        localStorage.setItem('first_name', first_name)
+        localStorage.setItem('token', token)
+
+        this.props.dispatch({ type: 'LOGGED_IN', payload: { login: login, first_name: first_name, last_name: last_name, token: token } })
+        this.props.history.push('/home')
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
-  register() {
-    
+  register(event) {
+    event.preventDefault()
+    alert('This feature is not supported yet')
   }
   
   render() {
@@ -48,3 +68,9 @@ export default class LoginPage extends Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  return state
+}
+
+export default connect(mapStateToProps)(LoginPage)

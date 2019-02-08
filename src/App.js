@@ -54,27 +54,6 @@ class App extends Component {
     this.forceUpdate()
   }
 
-  login(event) {
-    event.preventDefault()
-    axios.post('/api/login', { login: this.state.login, password: this.state.password }).then(data => data.data).then(data => {
-      if (data.err) {
-        alert(data.err)
-      } else {
-        let { token, last_name, first_name, login } = data
-
-        localStorage.setItem('login', login)
-        localStorage.setItem('last_name', last_name)
-        localStorage.setItem('first_name', first_name)
-        localStorage.setItem('token', token)
-
-        this.props.dispatch({ type: 'LOGGED_IN', payload: { login: login, first_name: first_name, last_name: last_name, token: token } })
-      }
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
-
   register(event) {
     event.preventDefault()
     alert('This functionality is not available now. Sorry ;)')
@@ -96,6 +75,7 @@ class App extends Component {
 
   logout() {
     this.props.dispatch({ type: 'LOGGED_OUT', payload: {} })
+    this.props.history.push('/')
   }
 
   allColors = [ '#7678ED', '#04E762', '#FF206E', '#5C80BC', '#4CB944', '#A2D729', '#F0E100', '#F7CB15', '#F55D3E', '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12' ]

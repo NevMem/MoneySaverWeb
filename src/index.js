@@ -252,14 +252,14 @@ if (token) {
     store.dispatch({ type: 'LOGGED_IN', payload: { login: login, token: token, first_name: first_name, last_name: last_name } })
 }
 
-const AuthenticatedRoute = ({component: Component, ...rest}) => (
-    <Route {...rest} render={(props) => ( props.token !== undefined ? <Component {...props} /> : <Redirect to ='/' /> )} />
-)
+const AuthenticatedRoute = ({component: Component, ...rest}) => {
+    return <Route {...rest} render={(props) => ( store.getState().token !== undefined ? <Component {...props} /> : <Redirect to = '/' /> )} />
+}
 
 const Router = () => (
     <div>
-        <Route path = '/' component = {LoginPage} />
-        <AuthenticatedRoute path = '/home' component = {App} />
+        <Route path = '/' component = {LoginPage} exact />
+        <AuthenticatedRoute path = '/home' component = {App} exact />
     </div>
 )
 
