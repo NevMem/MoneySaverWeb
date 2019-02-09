@@ -3,8 +3,9 @@ import './main.css'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { Doughnut, Bar, Line } from 'react-chartjs-2'
-import delete_icon from './delete-icon.svg'
 import ModalPopup from './components/ModalPopup'
+import ByTagSum from './components/ByTagSum'
+import History from './components/History'
 
 class App extends Component {
 
@@ -492,72 +493,8 @@ class App extends Component {
               </div>
               {labels.length > 0 && <div className = 'card'><Doughnut height = {200} width = {200} data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
             </div>
-            <br />
-            <h2>Полная сумма по каждому тегу</h2>
-            <br />
-            <table className = 'main-info'>
-              <thead>
-                <tr>
-                  <td width = '33%'>Тег</td>
-                  <td width = '33%'>Сумма</td>
-                  <td width = '33%'>Средний расход в день</td>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((el, key) => {
-                  return (
-                    <tr key = {key}>
-                      <td>{el.label}</td>
-                      <td>{el.value}</td>
-                      <td>{(el.value / this.props.countOfDays * 100 | 0) / 100.}</td>
-                    </tr>
-                  )
-              })}
-              </tbody>
-            </table>
-
-            <br />
-            <h2>Последение действия</h2>
-            <br />
-
-            <table className = 'records'>
-              <thead>
-                <tr>
-                  <td>Wallet</td>
-                  <td>Name</td>
-                  <td>Value</td>
-                  <td>Tags</td>
-                  <td>Date</td>
-                </tr>
-              </thead>
-              <tbody>
-                {this.props.records.map((el, key) => {
-                  let cls = 'increase'
-                  if (el.value < 0)
-                    cls = 'decrease'
-
-                  let tags = 'no tags'
-                  let date = 'not specified'
-
-                  if (el.tags)
-                    tags = el.tags
-                  if (el.date)
-                    date = this.getDate(el.date)
-                  
-                  return (
-                    <tr className = {cls} key = {key}>
-                      <td>{el.wallet}</td>
-                      <td>{el.name}</td>
-                      <td>{el.value}</td>
-                      <td>{tags}</td>
-                      <td>{date}</td>
-                      <td><button className = 'edit-btn' onClick = {this.editRecord.bind(this, el)}>edit</button></td>
-                      <td className = 'remove-btn'><img onClick = {this.removeRecord.bind(this, el)} src = {delete_icon} alt = 'delete' /></td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+            <ByTagSum data = {data} countOfDays = {this.props.countOfDays} />
+            <History editRecord = {this.editRecord.bind(this)} removeRecord = {this.removeRecord.bind(this)} /> 
           </div>
         </main>
         <footer>

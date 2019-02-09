@@ -16,7 +16,7 @@ html {
     display: grid;
 
     grid-template-columns: repeat(16, 1fr);
-    grid-template-rows: 70px auto 70px;
+    grid-template-rows: 80px auto 70px;
 
     grid-gap: 10px;
     padding-top: 10px;
@@ -25,10 +25,12 @@ html {
 header {
     grid-row: 1;
     grid-column: 3 / 15;
-    background-color: #7a0099;
-    line-height: 70px;
+    background-color: #9504b9;
+    /* background-color: #1098f7; */
+    /* background-color: #8a1c7c; */
+    line-height: 80px;
 
-    padding: 0px 10px;
+    padding: 0px 20px;
 }
 
 header h1 {
@@ -428,6 +430,28 @@ table {
 .edit-form .edit-form-input-group label {
     font-size: 0.7em;
     color: gray;
+}
+
+.centered {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.btn-special {
+    border: none;
+    padding: 12px 28px;
+    font-size: 26px;
+    background: linear-gradient(to top right, rgb(183, 0, 255), rgb(255, 0, 234));
+    border-radius: 2px;
+}
+
+.by-tag-card > h2:first-child {
+    line-height: 70px;
+}
+
+.history-card > h2:first-child {
+    line-height: 70px;
 }
 
 @media screen and (max-width: 1500px) {
