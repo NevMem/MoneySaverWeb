@@ -6,6 +6,9 @@ import { Doughnut, Bar, Line } from 'react-chartjs-2'
 import ModalPopup from './components/ModalPopup'
 import ByTagSum from './components/ByTagSum'
 import History from './components/History'
+import api from './api'
+import AddTagForm from './components/AddTagForm'
+import Processing from './components/Processing';
 
 class App extends Component {
 
@@ -24,7 +27,7 @@ class App extends Component {
       day: current.getDate(), 
       hour: current.getHours(), 
       minute: current.getMinutes(), 
-      allTags: [ 'Еда', 'Транспорт', 'Медиа', 'Проживание', 'Электроника', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное' ], 
+      allTags: [ /*'Еда', 'Транспорт', 'Медиа', 'Проживание', 'Электроника', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное'*/ ], 
       currentTag: 0, 
       currentEditTag: 0, 
       allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ], 
@@ -34,7 +37,7 @@ class App extends Component {
 
       modalVisible: false, 
       modalHeader: '-- TODO --', 
-      modalContent: '-- TODO --', 
+      modalType: '-- TODO --', 
 
       edit_name: '', 
       edit_value: 0, 
@@ -46,8 +49,18 @@ class App extends Component {
       current_edit_record: undefined, 
 
       historyLenghts: [ 7, 14, 21, 28, 56, 28 * 4, 365 ],
-      currentHistoryLengthIndex: 0
+      currentHistoryLengthIndex: 0,
+      processing_info: '',
     }
+
+    api.loadTags(this.props.token, this.props.login)
+      .then(data => {
+        this.setState({ allTags: data })        
+      })
+      .catch(err => {
+        // TODO: normal notifications
+        console.log(err)
+      })
   }
 
   inputChange(event) {
@@ -219,7 +232,7 @@ class App extends Component {
 
   removeRecord(record, event) {
     event.preventDefault()
-    this.setState({ modalHeader: 'Remove record', current_edit_record: record, modalContent: 'remove' })
+    this.setState({ modalHeader: 'Remove record', current_edit_record: record, modalType: 'remove' })
     this.showModal()
   }
 
@@ -240,9 +253,30 @@ class App extends Component {
       currentEditTag: ncurTag, 
       edit_name: record.name, 
       edit_value: -record.value, 
-      modalContent: 'edit' 
+      modalType: 'edit' 
     })
     this.showModal()
+  }
+
+  addTag(tagName) {
+    this.setState({
+      modalVisible: true,
+      modalType: 'processing',
+      modalHeader: 'processing',
+    })
+    api.addTag(this.props.token, this.props.login, tagName)
+      .then(data => {
+        this.setState({
+          modalType: 'processing_success',
+          processing_info: data,
+        })
+      })
+      .catch(err => {
+        this.setState({
+          modalType: 'processing_error',
+          processing_info: err,
+        })
+      })
   }
 
   showModal() {
@@ -256,16 +290,16 @@ class App extends Component {
   }
 
   changeModalRender() {
-    if (this.state.modalContent === 'edit') {
+    if (this.state.modalType === 'edit') {
       return (
         <div>
           <h3>You can edit record here</h3>
           <div className = 'edit-form'>
-            <div className = 'edit-form-input-group'>
+            <div className = 'input-group'>
               <label>Название</label>
               <input id = 'edit_name' onChange = {this.inputChange.bind(this)} value = {this.state.edit_name} />
             </div>
-            <div className = 'edit-form-input-group'>
+            <div className = 'input-group'>
               <label>Стоимость</label>
               <input id = 'edit_value' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_value} />
             </div>
@@ -278,27 +312,27 @@ class App extends Component {
               }) }
             </div>
             <div className = 'row'>
-              <div className = 'edit-form-input-group'>
+              <div className = 'input-group'>
                 <label>Year</label>
                 <input id = 'edit_year' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_year} />
               </div>
 
-              <div className = 'edit-form-input-group'>
+              <div className = 'input-group'>
                 <label>Month</label>
                 <input id = 'edit_month' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_month} />
               </div>
 
-              <div className = 'edit-form-input-group'>
+              <div className = 'input-group'>
                 <label>Day</label>
                 <input id = 'edit_day' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_day} />
               </div>
 
-              <div className = 'edit-form-input-group'>
+              <div className = 'input-group'>
                 <label>Hour</label>
                 <input id = 'edit_hour' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_hour} />
               </div>
 
-              <div className = 'edit-form-input-group'>
+              <div className = 'input-group'>
                 <label>Minute</label>
                 <input id = 'edit_minute' onChange = {this.numberChanger.bind(this)} value = {this.state.edit_minute} />
               </div>
@@ -311,7 +345,7 @@ class App extends Component {
           </div>
         </div>
       )
-    } else if (this.state.modalContent === 'remove') {
+    } else if (this.state.modalType === 'remove') {
       return (
         <div>
           <h3>You are really want to remove this record?</h3>
@@ -322,9 +356,29 @@ class App extends Component {
           </div>
         </div>
       )
+    } else if (this.state.modalType === 'add tag') {
+      return (
+        <AddTagForm addTag = {this.addTag.bind(this)} />
+      )
+    } else if (this.state.modalType === 'processing' || this.state.modalType === 'processing_success' || this.state.modalType === 'processing_error') {
+      let type = 'in_progress'
+      if (this.state.modalType === 'processing_success')
+        type = 'success'
+      if (this.state.modalType === 'processing_error')
+        type = 'error'
+      return <Processing close = {this.hideModal.bind(this)} type = {type} info = {this.state.processing_info} />
     } else {
       return null
     }
+  }
+
+  addTagButtonClicked(event) {
+    event.preventDefault()
+    this.setState({
+      modalVisible: true,
+      modalType: 'add tag',
+      modalHeader: 'Create tag'
+    })
   }
 
   changeHistoryLengthIndex(index, event) {
@@ -389,7 +443,7 @@ class App extends Component {
 
     return (
       <div className = 'wrapper'>
-        <ModalPopup renderContent = {this.changeModalRender.bind(this)} open = {this.showModal.bind(this)} close = {this.hideModal.bind(this)} visible = {this.state.modalVisible} header = {this.state.modalHeader} content = {this.state.modalContent} />
+        <ModalPopup renderContent = {this.changeModalRender.bind(this)} open = {this.showModal.bind(this)} close = {this.hideModal.bind(this)} visible = {this.state.modalVisible} header = {this.state.modalHeader} content = {this.state.modalType} />
         <header>
           <h1>Money Saver</h1>
         </header>
@@ -415,7 +469,7 @@ class App extends Component {
                   <div className = 'input-label'>Стоимость</div>
                   <input onChange = {this.numberChanger.bind(this)} value = {this.state.value} id = 'value' type = 'text' autoComplete = 'false' />
                 </div>
-                <div className = 'input-label'>Теги</div>
+                <div className = 'input-label'>Выберете тег</div>
                 <div className = 'tags'>
                   {this.state.allTags.map((el, key) => {
                     let cls = 'tag'
@@ -425,6 +479,7 @@ class App extends Component {
                       <div onClick = {this.onTagClick.bind(this, key)} className = {cls} key = {key}>{el}</div>
                     )
                   })}
+                  <div className = 'tag add-tag-button' onClick = {this.addTagButtonClicked.bind(this)}>Add Tag</div>
                 </div>
                 <select onChange = {this.changeSelect.bind(this)} value = {this.state.allWallets[this.state.currentWallet]} className = 'wallet' name = 'wallet'>
                   {this.state.allWallets.map((el, key) => {

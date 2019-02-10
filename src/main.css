@@ -226,6 +226,10 @@ table {
     cursor: pointer;
 }
 
+.add-tag-button {
+    border: 1px solid #b710e0;
+}
+
 .edit-tags {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -418,7 +422,7 @@ table {
     cursor: pointer;
 }
 
-.edit-form input {
+.edit-form input, .input-group > input {
     line-height: 30px;
     font-size: 24px;
     width: calc(100% - 14px);
@@ -428,7 +432,7 @@ table {
     outline: none;
 }
 
-.edit-form .edit-form-input-group label {
+.edit-form .input-group label {
     font-size: 0.7em;
     color: gray;
 }
@@ -531,3 +535,104 @@ div.ranger.active {
     background-color: #04E762;
     color: black;
 }
+
+.processing_in_progress {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+    text-transform: uppercase;
+    color: rgb(150, 150, 150);
+}
+
+.processing_in_progress:after {
+    content: '';
+    width: 144px;
+    height: 144px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border: 3px solid transparent;
+    border-top: 3px solid rgb(200, 200, 200);
+    border-radius: 50%;
+    animation: rotation 1.7s linear infinite;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.processing_error {
+    border: 3px solid red;
+    width: 144px;
+    height: 144px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.processing_error:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 110px;
+    width: 4px;
+    border-radius: 2px;
+    background-color: red;
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    transform-origin: center center;
+}
+
+.processing_error:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 110px;
+    width: 4px;
+    border-radius: 2px;
+    background-color: red;
+    transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+    transform-origin: center center;
+}
+
+.processing_success {
+    border: 3px solid #04E762;
+    width: 144px;
+    height: 144px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.processing_success:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 49px;
+    width: 4px;
+    border-radius: 2px;
+    background-color: #04E762;
+    transform: translateX(-24px) translateY(-15px) rotate(-45deg);
+    transform-origin: center center;
+}
+
+.processing_success:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 76px;
+    width: 4px;
+    border-radius: 2px;
+    background-color: #04E762;
+    transform: translateX(16px) translateY(-50%) rotate(45deg);
+    transform-origin: center center;
+}
+  
