@@ -61,18 +61,20 @@ class LoginPage extends Component {
           <h1>Money Saver</h1>
         </header>
         <main>
-          <form className = 'login-form'>
-            <h2>Please login:</h2>
-            { this.state.error && <h3 style = {{ padding: 0, marginTop: 0, marginBottom: 0 }} className = 'error'>{this.state.error}</h3> }
-            <input id = 'login' type = 'text' placeholder = 'Login' value = {this.state.login} onChange = {this.inputChange.bind(this)} />
-            <input id = 'password' type = 'password' placeholder = 'Password' value = {this.state.password} onChange = {this.inputChange.bind(this)} />
-            <div className = 'buttons'>
-              <button style = {{textAlign: 'center'}} className = 'btn' onClick = {this.login.bind(this)}>
-                <div className = 'row' style = {{ padding: 0, margin: 0, textAlign: 'center', justifyContent: 'space-around' }}>{this.state.loading && <div className = 'small-loading'></div>}Login</div>
-              </button>
-              <button className = 'btn' onClick = {this.register.bind(this)}>Register</button>
-            </div>
-          </form>
+          <div style = {{ backgroundColor: '#292929' }} className = 'centered'>
+            <form className = 'login-form'>
+              <h2>Please login:</h2>
+              { this.state.error && <h3 style = {{ padding: 0, marginTop: 0, marginBottom: 0 }} className = 'error'>{this.state.error}</h3> }
+              <input id = 'login' type = 'text' placeholder = 'Login' value = {this.state.login} onChange = {this.inputChange.bind(this)} />
+              <input id = 'password' type = 'password' placeholder = 'Password' value = {this.state.password} onChange = {this.inputChange.bind(this)} />
+              <div className = 'buttons'>
+                <button style = {{textAlign: 'center'}} className = 'btn' onClick = {this.login.bind(this)}>
+                  <div className = 'row' style = {{ padding: 0, margin: 0, textAlign: 'center', justifyContent: 'space-around' }}>{this.state.loading && <div className = 'small-loading'></div>}Login</div>
+                </button>
+                <button className = 'btn' onClick = {this.register.bind(this)}>Register</button>
+              </div>
+            </form>
+          </div>
         </main>
         <footer>
             Footer // to do
