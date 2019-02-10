@@ -43,11 +43,10 @@ main {
 }
 
 .login-form {
-    /* width: 900px; */
     margin: 0 auto;
     display: grid;
-    grid-template-rows: 60px 90px 90px 90px;
-    background-color: #3a0c46;
+    /* grid-template-rows: 60px 90px 90px 90px; */
+    background-color: #292929;
     padding-left: calc(50% - 300px);
     padding-right: calc(50% - 300px);
 }
@@ -568,6 +567,15 @@ div.ranger.active {
     }
 }
 
+@keyframes rotation-shift {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 .processing_error {
     border: 3px solid red;
     width: 144px;
@@ -643,10 +651,13 @@ div.ranger.active {
     cursor: default;
 }
 
+.clear {
+    padding: 0 0;
+    margin: 0 0;
+}
+
 .tag-loading:before {
     content: '';
-    /* top: 50%; */
-    /* left: 50%; */
     transform: translate(-50%, -50%);
     border: 2px solid transparent;
     border-top: 2px solid rgb(200, 200, 200, .7);
@@ -656,6 +667,29 @@ div.ranger.active {
     height: 21px;
     width: 21px;
     position: absolute;
+}
+
+.small-loading {
+    position: relative;
+    cursor: default;
+    margin: 0 0;
+    padding: 10px 10px;
+}
+
+.small-loading:before {
+    content: '';
+    border: 2px solid transparent;
+    border-top: 2px solid rgb(200, 200, 200, .7);
+    animation: rotation-shift 0.6s linear infinite;
+    transform: translate(-50%, -50%);
+    transform-origin: center center;
+    border-radius: 50%;
+    height: 26px;
+    width: 26px;
+    position: absolute;
+    margin: 0 0;
+    margin-top: 4px;
+    padding: 0 0;
 }
 
 .tag-errored {

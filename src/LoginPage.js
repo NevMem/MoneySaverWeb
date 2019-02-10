@@ -8,6 +8,7 @@ class LoginPage extends Component {
     this.state = {
       login: '',
       password: '',
+      loading: false,
     }
   }
 
@@ -18,10 +19,20 @@ class LoginPage extends Component {
 
   login(event) {
     event.preventDefault()
+    this.setState({
+      loading: true,
+      error: '',
+    })
     axios.post('/api/login', { login: this.state.login, password: this.state.password }).then(data => data.data).then(data => {
       if (data.err) {
-        alert(data.err)
+        this.setState({
+          error: data.err,
+          loading: false,
+        })
       } else {
+        this.setState({
+          loading: false,
+        })
         let { token, last_name, first_name, login } = data
 
         localStorage.setItem('login', login)
@@ -52,10 +63,13 @@ class LoginPage extends Component {
         <main>
           <form className = 'login-form'>
             <h2>Please login:</h2>
+            { this.state.error && <h3 style = {{ padding: 0, marginTop: 0, marginBottom: 0 }} className = 'error'>{this.state.error}</h3> }
             <input id = 'login' type = 'text' placeholder = 'Login' value = {this.state.login} onChange = {this.inputChange.bind(this)} />
             <input id = 'password' type = 'password' placeholder = 'Password' value = {this.state.password} onChange = {this.inputChange.bind(this)} />
             <div className = 'buttons'>
-              <button className = 'btn' onClick = {this.login.bind(this)}>Login</button>
+              <button style = {{textAlign: 'center'}} className = 'btn' onClick = {this.login.bind(this)}>
+                <div className = 'row' style = {{ padding: 0, margin: 0, textAlign: 'center', justifyContent: 'space-around' }}>{this.state.loading && <div className = 'small-loading'></div>}Login</div>
+              </button>
               <button className = 'btn' onClick = {this.register.bind(this)}>Register</button>
             </div>
           </form>
