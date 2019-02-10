@@ -27,9 +27,13 @@ class App extends Component {
       day: current.getDate(), 
       hour: current.getHours(), 
       minute: current.getMinutes(), 
-      allTags: [ /*'Еда', 'Транспорт', 'Медиа', 'Проживание', 'Электроника', 'Одежда', 'Линзы', 'Посуда', 'Химия', 'Связь', 'Разное'*/ ], 
+      
+      allTags: [], 
       currentTag: 0, 
-      currentEditTag: 0, 
+      currentEditTag: 0,
+      tagsLoadingState: 'loading',
+      
+      
       allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ], 
       currentWallet: 0, 
       add_panel_error: '', 
@@ -55,11 +59,13 @@ class App extends Component {
 
     api.loadTags(this.props.token, this.props.login)
       .then(data => {
-        this.setState({ allTags: data })        
+        this.setState({ allTags: data, tagsLoadingState: 'ready' }) 
       })
       .catch(err => {
         // TODO: normal notifications
-        console.log(err)
+        this.setState({
+          tagsLoadingState: 'error'
+        })
       })
   }
 
@@ -471,6 +477,8 @@ class App extends Component {
                 </div>
                 <div className = 'input-label'>Выберете тег</div>
                 <div className = 'tags'>
+                  { this.state.tagsLoadingState === 'loading' && <div className = 'tag tag-loading'></div> }
+                  { this.state.tagsLoadingState === 'error' && <div className = 'tag tag-errored'></div> }
                   {this.state.allTags.map((el, key) => {
                     let cls = 'tag'
                     if (key === this.state.currentTag)
