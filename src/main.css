@@ -113,7 +113,8 @@ tbody tr {
 }
 
 .records .decrease {
-    color: rgba(255, 82, 82, 0.943);
+    /* color: rgba(255, 82, 82, 0.943); */
+    color: rgb(255, 0, 64);
 }
 
 table {
@@ -442,7 +443,9 @@ table {
     border: none;
     padding: 12px 28px;
     font-size: 26px;
-    background: linear-gradient(to top right, rgb(183, 0, 255), rgb(255, 0, 234));
+    /* background: linear-gradient(to top right, rgb(183, 0, 255), rgb(255, 0, 234)); */
+    border: 1px solid rgb(255, 0, 136);
+    color: rgb(255, 0, 136);
     border-radius: 2px;
 }
 

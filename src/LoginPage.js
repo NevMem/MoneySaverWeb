@@ -46,7 +46,6 @@ class LoginPage extends Component {
   render() {
     return (
       <div className = 'wrapper'>
-        {/* <ModalPopup renderContent = {this.changeModalRender.bind(this)} open = {this.showModal.bind(this)} close = {this.hideModal.bind(this)} visible = {this.state.modalVisible} header = {this.state.modalHeader} content = {this.state.modalContent} /> */}
         <header>
           <h1>Money Saver</h1>
         </header>

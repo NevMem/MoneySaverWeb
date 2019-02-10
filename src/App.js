@@ -192,11 +192,11 @@ class App extends Component {
     let tags = [ this.state.allTags[this.state.currentEditTag] ]
     let id = this.state.current_edit_record._id
     let date = {
-      year: this.state.edit_year, 
-      month: this.state.edit_month, 
-      day: this.state.edit_day, 
-      hour: this.state.edit_hour, 
-      minute: this.state.edit_minute
+      year: parseInt(this.state.edit_year, 10), 
+      month: parseInt(this.state.edit_month, 10), 
+      day: parseInt(this.state.edit_day, 10), 
+      hour: parseInt(this.state.edit_hour, 10), 
+      minute: parseInt(this.state.edit_minute, 10)
     }
 
     axios.post('/api/edit', {
