@@ -44,9 +44,9 @@ main {
 
 .login-form {
     display: grid;
-    max-width: 500px;
+    max-width: 600px;
     /* max-height: 400px; */
-    grid-template-rows: repeat(auto-fill, minmax(65px, 1fr));
+    grid-template-rows: repeat(5, minmax(65px, 1fr));
     padding-bottom: 20px;
 }
 
@@ -358,7 +358,7 @@ table {
     box-shadow: 0px 3px 6px #292929;
     color: black;
 
-    min-width: 600px;
+    min-width: 350px;
 
     display: grid;
     grid-template-rows: 70px auto;
@@ -455,6 +455,24 @@ table {
     /* background: linear-gradient(to top right, rgb(183, 0, 255), rgb(255, 0, 234)); */
     border: 1px solid rgb(255, 0, 136);
     color: rgb(255, 0, 136);
+    border-radius: 2px;
+}
+
+.btn-toggle {
+    border: none;
+    padding: 7px 18px;
+    font-size: 21px;
+    border: 1px solid rgb(255, 0, 136);
+    color: rgb(255, 0, 136);
+    border-radius: 2px;
+}
+
+.btn-toggled {
+    border: none;
+    padding: 7px 18px;
+    border: 1px solid rgb(255, 0, 136);
+    background-color: rgb(255, 0, 136);
+    color: white;
     border-radius: 2px;
 }
 

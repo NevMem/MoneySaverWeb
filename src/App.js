@@ -9,33 +9,20 @@ import History from './components/History'
 import api from './api'
 import AddTagForm from './components/AddTagForm'
 import Processing from './components/Processing';
+import Profile from './components/Profile';
 
 class App extends Component {
 
   constructor(prps) {
     super(prps)
-    
-    let current = new Date()
-
     this.state = {
-      login: '', 
-      password: '',
-      name: '', 
-      value: '', 
-      year: current.getFullYear(), 
-      month: current.getMonth() + 1, 
-      day: current.getDate(), 
-      hour: current.getHours(), 
-      minute: current.getMinutes(), 
-      
-      allTags: [], 
-      currentTag: 0, 
+      allTags: [],
       currentEditTag: 0,
       tagsLoadingState: 'loading',
       
+      fromTemplate: false,
       
-      allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ], 
-      currentWallet: 0, 
+      allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ],
       add_panel_error: '', 
       add_panel_success: '', 
 
@@ -52,7 +39,7 @@ class App extends Component {
       edit_minute: -1, 
       current_edit_record: undefined, 
 
-      historyLenghts: [ 7, 14, 21, 28, 56, 28 * 4, 365 ],
+      historyLenghts: [ 7, 21, 56, 28 * 4, 365 ],
       currentHistoryLengthIndex: 0,
       processing_info: '',
     }
@@ -135,11 +122,11 @@ class App extends Component {
     this.setState({ currentWallet: index })
   }
 
-  addRecord() {
+  addRecord(name, value, year, month, day, hour, minute, wallet, tag) {
     let { login, token } = this.props
-    let { name, value, year, month, day, hour, minute } = this.state
-    let wallet = this.state.allWallets[this.state.currentWallet]
-    let tag = this.state.allTags[this.state.currentTag]
+    // let { name, value, year, month, day, hour, minute } = this.state
+    // let wallet = this.state.allWallets[this.state.currentWallet]
+    // let tag = this.state.allTags[this.state.currentTag]
 
     this.setState({
       add_panel_error: '',
@@ -394,6 +381,13 @@ class App extends Component {
     })
   }
 
+  toggleAddMode(event) {
+    event.preventDefault()
+    this.setState({
+      fromTemplate: !this.state.fromTemplate
+    })
+  }
+
   render() {
     let data = []
 
@@ -455,58 +449,16 @@ class App extends Component {
         </header>
         <main>
           <div className = 'content'>
-            <div className = 'profile'>
-              <div className = 'info-part'>
-                <h1>Profile info</h1>
-                <h2>{this.props.first_name + ' ' + this.props.last_name}</h2>
-                <h3 className = 'grayed'>{'@' + this.props.login}</h3>
-                <br/>
-                <button className = 'btn' onClick = {this.logout.bind(this)}>Logout</button>
-              </div>
-
-              <div className = 'add-part'>
-                {this.state.add_panel_error && <h4 className = 'error'>{this.state.add_panel_error}</h4>}
-                {this.state.add_panel_success && <h4 className = 'success'>{this.state.add_panel_success}</h4>}
-                <div className = 'input-block'>
-                  <div className = 'input-label'>Название</div>
-                  <input onChange = {this.inputChange.bind(this)} value = {this.state.name} id = 'name' type = 'text' autoComplete = 'false' />
-                </div>
-                <div className = 'input-block'>
-                  <div className = 'input-label'>Стоимость</div>
-                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.value} id = 'value' type = 'text' autoComplete = 'false' />
-                </div>
-                <div className = 'input-label'>Выберете тег</div>
-                <div className = 'tags'>
-                  { this.state.tagsLoadingState === 'loading' && <div className = 'tag tag-loading'></div> }
-                  { this.state.tagsLoadingState === 'error' && <div className = 'tag tag-errored'></div> }
-                  {this.state.allTags.map((el, key) => {
-                    let cls = 'tag'
-                    if (key === this.state.currentTag)
-                      cls += ' active-tag'
-                    return (
-                      <div onClick = {this.onTagClick.bind(this, key)} className = {cls} key = {key}>{el}</div>
-                    )
-                  })}
-                  <div className = 'tag add-tag-button' onClick = {this.addTagButtonClicked.bind(this)}>Add Tag</div>
-                </div>
-                <select onChange = {this.changeSelect.bind(this)} value = {this.state.allWallets[this.state.currentWallet]} className = 'wallet' name = 'wallet'>
-                  {this.state.allWallets.map((el, key) => {
-                    return (
-                      <option key = {key}>{el}</option>
-                    )
-                  })}
-                </select>
-                <div className = 'input-label'>Время</div>
-                <div className = 'date-block'>
-                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.year} placeholder = 'year' type = 'text' id = 'year' />
-                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.month} placeholder = 'month' type = 'text' id = 'month' />
-                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.day} placeholder = 'day' type = 'text' id = 'day' />
-                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.hour} placeholder = 'hour' type = 'text' id = 'hour' />
-                  <input onChange = {this.numberChanger.bind(this)} value = {this.state.minute} placeholder = 'minute' type = 'text' id = 'minute' />
-                </div>
-                <button onClick = {this.addRecord.bind(this)} className = 'btn'>Добавить</button>
-              </div>
-            </div>
+            <Profile
+              addTagButtonClicked = {this.addTagButtonClicked.bind(this)}
+              tags = {this.state.allTags}
+              wallets = {this.state.allWallets}
+              logout = {this.logout.bind(this)}
+              addRecord = {this.addRecord.bind(this)}
+              tagsLoadingState = {this.state.tagsLoadingState}
+              add_panel_error = {this.state.add_panel_error}
+              add_panel_success = {this.state.add_panel_success}
+            />
             {prefDayLabels.length > 0 && (
               <div className = 'card'>
                 <Line data = {{ 
@@ -554,7 +506,7 @@ class App extends Component {
                   </div>
                 )}
               </div>
-              {labels.length > 0 && <div className = 'card'><Doughnut height = {200} width = {200} data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
+              {labels.length > 0 && <div className = 'card'><Doughnut height = {300} data = {{ datasets: [{ data: dt, borderColor: this.allColors, backgroundColor: this.allColors }], labels: labels }} /></div> }
             </div>
             <ByTagSum data = {data} countOfDays = {this.props.countOfDays} />
             <History editRecord = {this.editRecord.bind(this)} removeRecord = {this.removeRecord.bind(this)} /> 

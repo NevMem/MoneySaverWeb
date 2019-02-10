@@ -60,6 +60,8 @@ class History extends Component {
               <td>Value</td>
               <td>Tags</td>
               <td>Date</td>
+              <td></td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
