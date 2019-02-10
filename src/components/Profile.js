@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import './profile-styles.css'
 
 class Profile extends Component {
   static propTypes = {
@@ -15,13 +16,15 @@ class Profile extends Component {
     tagsLoadingState: PropTypes.string.isRequired,
     add_panel_error: PropTypes.string.isRequired,
     add_panel_success: PropTypes.string.isRequired,
+    createNewTemplate: PropTypes.func.isRequired,
+    templates: PropTypes.array.isRequired,
   }
 
   constructor(prps) {
     super(prps)
     const current = new Date()
     this.state = {
-      fromTemplate: false,
+      fromTemplate: true,
       currentWallet: 0,
       currentTag: 0,
       year: current.getFullYear(), 
@@ -102,48 +105,67 @@ class Profile extends Component {
           <br/>
           <button className = { !this.state.fromTemplate ? 'btn btn-toggle' : 'btn btn-toggle btn-toggled' } onClick = {this.toggleAddMode.bind(this)}>Use templates</button>
         </div>
-        <div className = 'add-part'>
-          {this.props.add_panel_error && <h4 className = 'error'>{this.props.add_panel_error}</h4>}
-          {this.props.add_panel_success && <h4 className = 'success'>{this.props.add_panel_success}</h4>}
-          <div className = 'input-block'>
-            <div className = 'input-label'>Название</div>
-            <input onChange = {this.inputChange.bind(this)} value = {this.state.name} id = 'name' type = 'text' autoComplete = 'false' />
+        { !this.state.fromTemplate &&
+          <div className = 'add-part'>
+            {this.props.add_panel_error && <h4 className = 'error'>{this.props.add_panel_error}</h4>}
+            {this.props.add_panel_success && <h4 className = 'success'>{this.props.add_panel_success}</h4>}
+            <div className = 'input-block'>
+              <div className = 'input-label'>Название</div>
+              <input onChange = {this.inputChange.bind(this)} value = {this.state.name} id = 'name' type = 'text' autoComplete = 'false' />
+            </div>
+            <div className = 'input-block'>
+              <div className = 'input-label'>Стоимость</div>
+              <input onChange = {this.numberChanger.bind(this)} value = {this.state.value} id = 'value' type = 'text' autoComplete = 'false' />
+            </div>
+            <div className = 'input-label'>Выберете тег</div>
+            <div className = 'tags'>
+              { this.props.tagsLoadingState === 'loading' && <div className = 'tag tag-loading'></div> }
+              { this.props.tagsLoadingState === 'error' && <div className = 'tag tag-errored'></div> }
+              { this.props.tags.map((el, key) => {
+                let cls = 'tag'
+                if (key === this.state.currentTag)
+                  cls += ' active-tag'
+                return (
+                  <div onClick = {this.onTagClick.bind(this, key)} className = {cls} key = {key}>{el}</div>
+                )
+              }) }
+              <div className = 'tag add-tag-button' onClick = {this.props.addTagButtonClicked.bind(this)}>Add Tag</div>
+            </div>
+            <select onChange = {this.changeSelect.bind(this)} value = {this.props.wallets[this.state.currentWallet]} className = 'wallet' name = 'wallet'>
+              {this.props.wallets.map((el, key) => {
+                return (
+                  <option key = {key}>{el}</option>
+                )
+              })}
+            </select>
+            <div className = 'input-label'>Время</div>
+            <div className = 'date-block'>
+              <input onChange = {this.numberChanger.bind(this)} value = {this.state.year} placeholder = 'year' type = 'text' id = 'year' />
+              <input onChange = {this.numberChanger.bind(this)} value = {this.state.month} placeholder = 'month' type = 'text' id = 'month' />
+              <input onChange = {this.numberChanger.bind(this)} value = {this.state.day} placeholder = 'day' type = 'text' id = 'day' />
+              <input onChange = {this.numberChanger.bind(this)} value = {this.state.hour} placeholder = 'hour' type = 'text' id = 'hour' />
+              <input onChange = {this.numberChanger.bind(this)} value = {this.state.minute} placeholder = 'minute' type = 'text' id = 'minute' />
+            </div>
+            <button onClick = {this.addRecord.bind(this)} className = 'btn'>Добавить</button>
           </div>
-          <div className = 'input-block'>
-            <div className = 'input-label'>Стоимость</div>
-            <input onChange = {this.numberChanger.bind(this)} value = {this.state.value} id = 'value' type = 'text' autoComplete = 'false' />
-          </div>
-          <div className = 'input-label'>Выберете тег</div>
-          <div className = 'tags'>
-            { this.props.tagsLoadingState === 'loading' && <div className = 'tag tag-loading'></div> }
-            { this.props.tagsLoadingState === 'error' && <div className = 'tag tag-errored'></div> }
-            { this.props.tags.map((el, key) => {
-              let cls = 'tag'
-              if (key === this.state.currentTag)
-                cls += ' active-tag'
+        }
+        { this.state.fromTemplate &&
+          <div className = 'templates'>
+            { this.props.templates.map((el, index) => {
               return (
-                <div onClick = {this.onTagClick.bind(this, key)} className = {cls} key = {key}>{el}</div>
+                <div className = 'template'>
+                  <div className = 'template-name'>{el.name}</div>
+                  <div className = 'template-value'>{el.value}</div>
+                  <div className = 'template-tag'>{el.tags[0]}</div>
+                  <div className = 'template-wallet'>{el.wallet}</div>
+                </div>
               )
             }) }
-            <div className = 'tag add-tag-button' onClick = {this.props.addTagButtonClicked.bind(this)}>Add Tag</div>
+            <div className = 'template add-template' onClick = {this.props.createNewTemplate}>
+              Add new template
+            </div>
           </div>
-          <select onChange = {this.changeSelect.bind(this)} value = {this.props.wallets[this.state.currentWallet]} className = 'wallet' name = 'wallet'>
-            {this.props.wallets.map((el, key) => {
-              return (
-                <option key = {key}>{el}</option>
-              )
-            })}
-          </select>
-          <div className = 'input-label'>Время</div>
-          <div className = 'date-block'>
-            <input onChange = {this.numberChanger.bind(this)} value = {this.state.year} placeholder = 'year' type = 'text' id = 'year' />
-            <input onChange = {this.numberChanger.bind(this)} value = {this.state.month} placeholder = 'month' type = 'text' id = 'month' />
-            <input onChange = {this.numberChanger.bind(this)} value = {this.state.day} placeholder = 'day' type = 'text' id = 'day' />
-            <input onChange = {this.numberChanger.bind(this)} value = {this.state.hour} placeholder = 'hour' type = 'text' id = 'hour' />
-            <input onChange = {this.numberChanger.bind(this)} value = {this.state.minute} placeholder = 'minute' type = 'text' id = 'minute' />
-          </div>
-          <button onClick = {this.addRecord.bind(this)} className = 'btn'>Добавить</button>
-          </div>
+        }
       </div>
     )
   }

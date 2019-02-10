@@ -278,6 +278,19 @@ table {
     cursor: pointer;
 }
 
+.picker {
+    outline: none;
+    padding: 7px 12px;
+    font-size: 20px;
+    border: none;
+    /* background-color: #491457; */
+    /* background-color: #393939; */
+    color: black;
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid rgba(100, 100, 100, .3);
+}
+
 .error {
     font-weight: 250;
     color: rgb(199, 73, 0);
@@ -482,6 +495,12 @@ table {
 
 .history-card > h2:first-child {
     line-height: 70px;
+}
+
+@media screen and (min-width: 1000px) {
+    .modalFrame {
+        min-width: 700px;
+    }
 }
 
 @media screen and (max-width: 1500px) {

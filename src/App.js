@@ -8,8 +8,9 @@ import ByTagSum from './components/ByTagSum'
 import History from './components/History'
 import api from './api'
 import AddTagForm from './components/AddTagForm'
-import Processing from './components/Processing';
-import Profile from './components/Profile';
+import Processing from './components/Processing'
+import Profile from './components/Profile'
+import CreateTemplate from './components/CreateTemplate'
 
 class App extends Component {
 
@@ -17,12 +18,15 @@ class App extends Component {
     super(prps)
     this.state = {
       allTags: [],
+      allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ],
+      templates: [],
+
       currentEditTag: 0,
       tagsLoadingState: 'loading',
+      templatesLoadingState: 'loading',
       
       fromTemplate: false,
       
-      allWallets: [ 'Наличные', 'Сбербанк', 'ВТБ', 'АкБарс' ],
       add_panel_error: '', 
       add_panel_success: '', 
 
@@ -53,6 +57,13 @@ class App extends Component {
         this.setState({
           tagsLoadingState: 'error'
         })
+      })
+    api.loadTemplates(this.props.token, this.props.login)
+      .then(data => {
+        this.setState({ templates: data })
+      })
+      .catch(err => {
+        this.setState({ templatesLoadingState: 'error' })
       })
   }
 
@@ -124,9 +135,6 @@ class App extends Component {
 
   addRecord(name, value, year, month, day, hour, minute, wallet, tag) {
     let { login, token } = this.props
-    // let { name, value, year, month, day, hour, minute } = this.state
-    // let wallet = this.state.allWallets[this.state.currentWallet]
-    // let tag = this.state.allTags[this.state.currentTag]
 
     this.setState({
       add_panel_error: '',
@@ -360,9 +368,27 @@ class App extends Component {
       if (this.state.modalType === 'processing_error')
         type = 'error'
       return <Processing close = {this.hideModal.bind(this)} type = {type} info = {this.state.processing_info} />
+    } else if (this.state.modalType === 'template creation') {
+      return <CreateTemplate wallets = {this.state.allWallets} tags = {this.state.allTags} createTemplate = {this.createTemplate.bind(this)} />
     } else {
       return null
     }
+  }
+
+  createTemplate(name, value, wallet, tag) {
+    this.setState({
+      modalVisible: true,
+      modalHeader: 'Processing',
+      modalType: 'processing',
+      processing_info: '',
+    })
+    api.createTemplate(this.props.token, this.props.login, name, parseFloat(value, 10), wallet, tag)
+      .then(data => {
+        this.setState({ modalType: 'processing_success', processing_info: data })
+      })
+      .catch(err => {
+        this.setState({ modalType: 'processing_error', processing_info: err })
+      })
   }
 
   addTagButtonClicked(event) {
@@ -385,6 +411,14 @@ class App extends Component {
     event.preventDefault()
     this.setState({
       fromTemplate: !this.state.fromTemplate
+    })
+  }
+
+  createNewTemplate() {
+    this.setState({
+      modalVisible: true,
+      modalHeader: 'Create new template',
+      modalType: 'template creation',
     })
   }
 
@@ -458,6 +492,8 @@ class App extends Component {
               tagsLoadingState = {this.state.tagsLoadingState}
               add_panel_error = {this.state.add_panel_error}
               add_panel_success = {this.state.add_panel_success}
+              createNewTemplate = {this.createNewTemplate.bind(this)}
+              templates = {this.state.templates}
             />
             {prefDayLabels.length > 0 && (
               <div className = 'card'>
