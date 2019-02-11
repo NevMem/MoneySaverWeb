@@ -218,6 +218,17 @@ let reducer = (state, action) => {
             state.average = (state.average * 100 | 0) / 100.
         }
         return state
+    } else if (action.type === 'CLEAR_DATA') {
+        return { 
+            ...state, 
+            records: [], 
+            counter: {}, 
+            fullSum: 0, 
+            average: 0, 
+            countOfDays: 0, 
+            differentDays: new Set(), 
+            daySum: {}
+        }
     }
     return state
 }
@@ -240,6 +251,7 @@ function loadData(login, token) {
     .then(data => {
         console.info('Loading data comsumed', Date.now() - __start)
         let start = Date.now()
+        store.dispatch({ type: 'CLEAR_DATA' })
         store.dispatch({ type: 'BATCH_ADD', payload: data })
         console.info('Adding all records consumed', Date.now() - start, 'milliseconds')
     }).catch(err => {
@@ -256,9 +268,13 @@ const AuthenticatedRoute = ({component: Component, ...rest}) => {
     return <Route {...rest} render={(props) => ( store.getState().token !== undefined ? <Component {...props} /> : <Redirect to = '/' /> )} />
 }
 
+const UnauthenticatedRoute = ({component: Component, ...rest}) => {
+    return <Route {...rest} render={(props) => ( store.getState().token === undefined ? <Component {...props} /> : <Redirect to = '/home' /> )} />
+}
+
 const Router = () => (
     <div>
-        <Route path = '/' component = {LoginPage} exact />
+        <UnauthenticatedRoute path = '/' component = {LoginPage} exact />
         <AuthenticatedRoute path = '/home' component = {App} exact />
     </div>
 )
