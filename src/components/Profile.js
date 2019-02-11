@@ -38,7 +38,7 @@ class Profile extends Component {
   }
 
   changeSelect(event) {
-    let index = this.state.allWallets.indexOf(event.target.value)
+    let index = this.props.wallets.indexOf(event.target.value)
     this.setState({ currentWallet: index })
   }
 
