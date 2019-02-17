@@ -35,7 +35,7 @@ class Profile extends Component {
       minute: current.getMinutes(),
       name: '', 
       value: '',
-      editTemplatesMode: true, // TODO: set it false
+      editTemplatesMode: false,
     }
   }
 
