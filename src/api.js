@@ -73,4 +73,40 @@ function loadTemplates(token, login) {
     })
 }
 
-export default { loadTags, addTag, createTemplate, loadTemplates }
+function useTemplate(token, login, templateId, date) {
+    return new Promise((resolve, reject) => {
+        axios.post('/api/useTemplate', { token, login, templateId, date })
+            .then(data => data.data)
+            .then(data => {
+                if (data.type === 'ok') {
+                    resolve(data.data)
+                } else if (data.type === 'error') {
+                    reject(data.error)
+                } else {
+                    reject('Server response has unknown format')
+                }
+            })
+            .catch(err => {
+                reject(err + '')
+            })
+    })
+}
+
+function removeTemplate(token, login, templateId) {
+    return new Promise((resolve, reject) => {
+        axios.post('/api/removeTemplate', { token, login, templateId })
+            .then(data => data.data)
+            .then(data => {
+                if (data.type === 'ok') {
+                    resolve(data.data)
+                } else if (data.type === 'error') {
+                    reject(data.error)
+                } else {
+                    reject('Server reponse has unknown format')
+                }
+            })
+            .catch(err => reject(err))
+    })
+}
+
+export default { loadTags, addTag, createTemplate, loadTemplates, useTemplate, removeTemplate }

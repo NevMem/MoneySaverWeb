@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import './profile-styles.css'
+import Template from './Template';
 
 class Profile extends Component {
   static propTypes = {
@@ -34,6 +35,7 @@ class Profile extends Component {
       minute: current.getMinutes(),
       name: '', 
       value: '',
+      editTemplatesMode: true, // TODO: set it false
     }
   }
 
@@ -90,6 +92,12 @@ class Profile extends Component {
       this.props.wallets[this.state.currentWallet],
       this.props.tags[this.state.currentTag]
     )
+  }
+
+  toggleEditableMode() {
+    this.setState({
+      editTemplatesMode: !this.state.editTemplatesMode
+    })
   }
 
   render() {
@@ -150,19 +158,18 @@ class Profile extends Component {
           </div>
         }
         { this.state.fromTemplate &&
-          <div className = 'templates'>
-            { this.props.templates.map((el, index) => {
-              return (
-                <div className = 'template'>
-                  <div className = 'template-name'>{el.name}</div>
-                  <div className = 'template-value'>{el.value}</div>
-                  <div className = 'template-tag'>{el.tags[0]}</div>
-                  <div className = 'template-wallet'>{el.wallet}</div>
-                </div>
-              )
-            }) }
-            <div className = 'template add-template' onClick = {this.props.createNewTemplate}>
-              Add new template
+          <div>
+            <div className = 'templates-heading'>
+              <h2>Your templates</h2>
+              <button className = 'change-button' onClick = {this.toggleEditableMode.bind(this)}>edit</button>
+            </div>
+            <div className = 'templates'>
+              { this.props.templates.map((el, index) => {
+                return <Template key = {index} editMode = {this.state.editTemplatesMode} id = {el.id} name = {el.name} value = {el.value} tag = {el.tags[0]} wallet = {el.wallet} />
+              }) }
+              <div className = 'template add-template' onClick = {this.props.createNewTemplate}>
+                Add new template
+              </div>
             </div>
           </div>
         }
