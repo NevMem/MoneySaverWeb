@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import './profile-styles.css'
-import Template from './Template';
+import Template from './Template'
+import DatePicker from './DatePicker.js'
+import utils from '../utils';
 
 class Profile extends Component {
   static propTypes = {
@@ -28,15 +30,20 @@ class Profile extends Component {
       fromTemplate: true,
       currentWallet: 0,
       currentTag: 0,
-      year: current.getFullYear(), 
-      month: current.getMonth() + 1, 
-      day: current.getDate(), 
-      hour: current.getHours(), 
-      minute: current.getMinutes(),
+      dateMode: 'current time',
+      date: undefined,
       name: '', 
       value: '',
       editTemplatesMode: false,
     }
+  }
+
+  changeMode(mode) {
+    this.setState({ dateMode: mode })
+  }
+  
+  changeDate(date) {
+    this.setState({ date: date })
   }
 
   changeSelect(event) {
@@ -81,14 +88,29 @@ class Profile extends Component {
 
   addRecord(event) {
     event.preventDefault()
+    let year, month, day, hour, minute
+    if (this.state.dateMode === 'current time') {
+      const curTime = utils.createDate()
+      year = curTime.year
+      month = curTime.month
+      day = curTime.day
+      hour = curTime.hour
+      minute = curTime.minute
+    } else {
+      year = this.state.date.year
+      month = this.state.date.month
+      day = this.state.date.day
+      hour = this.state.date.hour
+      minute = this.state.date.minute
+    }
     this.props.addRecord(
       this.state.name,
       this.state.value,
-      this.state.year,
-      this.state.month,
-      this.state.day,
-      this.state.hour,
-      this.state.minute,
+      year,
+      month,
+      day,
+      hour,
+      minute,
       this.props.wallets[this.state.currentWallet],
       this.props.tags[this.state.currentTag]
     )
@@ -147,13 +169,7 @@ class Profile extends Component {
               })}
             </select>
             <div className = 'input-label'>Время</div>
-            <div className = 'date-block'>
-              <input onChange = {this.numberChanger.bind(this)} value = {this.state.year} placeholder = 'year' type = 'text' id = 'year' />
-              <input onChange = {this.numberChanger.bind(this)} value = {this.state.month} placeholder = 'month' type = 'text' id = 'month' />
-              <input onChange = {this.numberChanger.bind(this)} value = {this.state.day} placeholder = 'day' type = 'text' id = 'day' />
-              <input onChange = {this.numberChanger.bind(this)} value = {this.state.hour} placeholder = 'hour' type = 'text' id = 'hour' />
-              <input onChange = {this.numberChanger.bind(this)} value = {this.state.minute} placeholder = 'minute' type = 'text' id = 'minute' />
-            </div>
+            <DatePicker changeDate = {this.changeDate.bind(this)} changeMode = {this.changeMode.bind(this)} />
             <button onClick = {this.addRecord.bind(this)} className = 'btn'>Добавить</button>
           </div>
         }

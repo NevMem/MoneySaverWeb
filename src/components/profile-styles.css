@@ -129,3 +129,46 @@
         transform: rotate(0deg);
     }
 }
+
+.current-time-toggler {
+    border: 1px solid rgb(255, 0, 136);
+    background-color: transparent;
+    transition: all ease-in .3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    line-height: 42px;
+}
+
+.profile .current-time-toggler > div {
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+    margin: 0 0;
+    margin-bottom: 0px;
+    transition: all ease-in .3s;
+}
+
+.current-time-toggler > div:first-child {
+    background-color: rgb(255, 0, 136);
+    color: white;
+}
+
+.current-time-toggler > div:last-child {
+    background-color: transparent;
+    color: white;
+}
+
+.current-time-toggler.toggled {
+    border: 1px solid rgb(225, 0, 255);
+}
+
+.current-time-toggler.toggled > div:first-child {
+    background-color: transparent;
+}
+
+.current-time-toggler.toggled > div:last-child {
+    background-color: rgb(225, 0, 255);
+    color: white;
+}

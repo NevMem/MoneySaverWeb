@@ -84,7 +84,7 @@ class History extends Component {
                 <tr className = {cls} key = {key}>
                   <td>{el.wallet}</td>
                   <td>{el.name}</td>
-                  <td>{el.value}</td>
+                  <td>{-el.value}</td>
                   <td>{tags}</td>
                   <td>{date}</td>
                   <td><button className = 'edit-btn' onClick = {this.props.editRecord.bind(this, el)}>edit</button></td>

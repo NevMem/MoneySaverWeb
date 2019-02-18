@@ -30,7 +30,7 @@ class Template extends Component {
   }
 
   use() {
-    if (this.state.loading === false && this.state.editMode === false) {
+    if (this.state.loading === false && this.props.editMode === false) {
       this.setState({ loading: true })
       api.useTemplate(this.props.token, this.props.login, this.props.id, utils.createDate())
         .then(data => {
