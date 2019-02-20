@@ -25,7 +25,6 @@ class Profile extends Component {
 
   constructor(prps) {
     super(prps)
-    const current = new Date()
     this.state = {
       fromTemplate: true,
       currentWallet: 0,
