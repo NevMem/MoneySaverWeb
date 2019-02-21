@@ -85,6 +85,7 @@ let reducer = (state, action) => {
         let { login, first_name, last_name, token } = action.payload
 
         loadData(login, token)
+        loadInfo(login, token)
 
         return { ...state, login: login, token: token, first_name: first_name, last_name: last_name }
     } else if (action.type === 'LOGGED_OUT') {
@@ -257,6 +258,23 @@ function loadData(login, token) {
     }).catch(err => {
         console.log(err)
     })
+}
+
+function loadInfo(login, token) {
+    axios.post('/api/info', { login, token, info7: 'true', info30: 'true', months: 'true' })
+        .then(data => data.data)
+        .then(data => {
+            if (data.type === 'ok') {
+                console.log(data.info)
+            } else if (data.type === 'error') {
+                console.log(data.err)
+            } else {
+                console.log('Unknown server response format')
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 let { token, first_name, last_name, login } = localStorage
