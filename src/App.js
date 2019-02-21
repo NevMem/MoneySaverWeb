@@ -450,9 +450,6 @@ class App extends Component {
       barLabels.push(el)
     }
 
-    barData.reverse()
-    barLabels.reverse()
-
     barData = barData.slice(-this.state.historyLenghts[this.state.currentHistoryLengthIndex])
     barLabels = barLabels.slice(-this.state.historyLenghts[this.state.currentHistoryLengthIndex])
 
@@ -464,8 +461,6 @@ class App extends Component {
       prefDaySum.push(currentSum)
       prefDayLabels.push(elem)
     }
-    prefDayLabels.reverse()
-    prefDaySum.reverse()
     
     for (let i = 1; i < prefDaySum.length; ++i) {
       prefDaySum[i] += prefDaySum[i - 1]
@@ -518,12 +513,12 @@ class App extends Component {
             <div className = 'dashboard'>
               <div className = 'info-table card'>
                 <div className = 'fullSum'>
-                  <div className = 'value'>{(-this.props.fullSum * 100 | 0) / 100.} &#8381;</div>
+                  <div className = 'value'>{this.props.fullSum} &#8381;</div>
                   <div className = 'label'>Полный расход</div>
                 </div>
 
                 <div className = 'average'>
-                  <div className = 'value'>{-this.props.average} &#8381;</div>
+                  <div className = 'value'>{this.props.average} &#8381;</div>
                   <div className = 'label'>Средний ежесуточный расход</div>
                 </div>
                 {barData.length > 0 && (

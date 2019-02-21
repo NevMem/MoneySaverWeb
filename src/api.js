@@ -109,4 +109,24 @@ function removeTemplate(token, login, templateId) {
     })
 }
 
-export default { loadTags, addTag, createTemplate, loadTemplates, useTemplate, removeTemplate }
+function loadInfo(token, login, options) {
+    return new Promise((resolve, reject) => {
+        axios.post('/api/info', { token, login, ...options })
+            .then(data => data.data)
+            .then(data => {
+                if (data.type === 'ok') {
+                    resolve(data.info)
+                } else if (data.type === 'error') {
+                    reject(data.err)
+                } else {
+                    reject('Unknown server reponse format')
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                reject('Error occurred')
+            })
+    })
+}
+
+export default { loadTags, addTag, createTemplate, loadTemplates, useTemplate, removeTemplate, loadInfo }
