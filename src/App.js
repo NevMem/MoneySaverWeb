@@ -96,7 +96,7 @@ class App extends Component {
     this.props.history.push('/')
   }
 
-  allColors = [ '#7678ED', '#04E762', '#FF206E', '#5C80BC', '#4CB944', '#A2D729', '#F0E100', '#F7CB15', '#F55D3E', '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12' ]
+  allColors = [ '#7371fc', '#7678ED', '#04E762', '#FF206E', '#5C80BC', '#4CB944', '#A2D729', '#F0E100', '#F7CB15', '#F55D3E', '#85FF9E', '#E7BB41', '#F45B69', '#FBFF12' ]
 
   onTagClick(index, event) {
     this.setState({ currentTag: index })
@@ -431,7 +431,7 @@ class App extends Component {
     for (let tag in this.props.counter) {
       let sum = this.props.counter[tag].sum
       let value = -sum
-      value = (value * 100 | 0) / 100.
+      value = +value.toFixed(2)
       data.push({ label: tag, value: value })
 
       labels.push(tag)
@@ -457,7 +457,7 @@ class App extends Component {
     let prefDayLabels = []
     let currentSum = 0
     for (let elem in this.props.daySum) {
-      currentSum = (this.props.daySum[elem] * 100. | 0) / 100.
+      currentSum = +this.props.daySum[elem].toFixed(2)
       prefDaySum.push(currentSum)
       prefDayLabels.push(elem)
     }

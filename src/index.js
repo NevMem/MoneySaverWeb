@@ -9,6 +9,11 @@ import LoginPage from './LoginPage'
 import api from './api'
 import vars from './vars'
 
+console.log('Money Saver application')
+console.log(`Current version is ${vars.VERSION}`)
+console.log(`Mode is: ${process.env.NODE_ENV}`)
+console.log()
+
 let codeDay = (date) => {
     return date.year + '-' + date.month + '-' + date.day
 }
@@ -40,7 +45,7 @@ let reducer = (state, action) => {
             first_name: undefined, 
             last_name: undefined 
         }
-    } else if (action.type === 'ADD_RECORD') {
+    } else if (action.type === 'ADD_RECORD') { // TODO:(remove this branch)
         let { record } = action.payload
         state = { ...state, records: [ ...state.records, record ] }
 
@@ -54,19 +59,6 @@ let reducer = (state, action) => {
         let cutted_date = record.date.year * 31 * 12 + record.date.month * 31 + record.date.day
         if (!state.differentDays.has(cutted_date))
             state.differentDays.add(cutted_date)
-        // if (state.differentDays.size >= 2) {
-            // let this_day = __get_prev_day(state.records[state.records.length - 2].date)
-            // let encoded = this_day.year * 31 * 12 + this_day.month * 31 + this_day.day
-            // while (!state.differentDays.has(encoded)) {
-            //     let dayCode = codeDay(this_day)
-            //     if (!state.daySum[dayCode])
-            //         state.daySum[dayCode] = 0
-            //     state.differentDays.add(encoded)
-            //     this_day = __get_prev_day(this_day)
-            //     encoded = this_day.year * 31 * 12 + this_day.month * 31 + this_day.day
-            // }
-        // }
-        
         state.countOfDays = state.differentDays.size
 
         state.fullSum += record.value
@@ -116,6 +108,19 @@ let reducer = (state, action) => {
         return { ...state, fullSum: payload.total, average: payload.average, countOfDays: payload.countOfDays }
     } else if (action.type === vars.DAY_SUM) {
         return { ...state, daySum: action.payload.daySum }
+    } else if (action.type === vars.MONTHS_DESCRIPTION) {
+        let parsed = []
+        const months = action.payload.monthSum
+        for (let monthInfo in months) {
+            const date = monthInfo.split('.')
+            const year = +date[0]
+            const month = +date[1]
+            parsed.push({ date: { year, month }, description: months[monthInfo] })
+        }
+        return {
+            ...state,
+            monthSum: parsed
+        }
     }
     return state
 }
@@ -146,11 +151,12 @@ function loadData(token, login) {
 }
 
 function loadInfo(token, login) {
-    api.loadInfo(token, login, { months: 'true', daysDescription: 'true' })
+    api.loadInfo(token, login, { months: 'true', daysDescription: 'true', info7: 'true', info30: 'true' })
         .then(data => {
-            const { totalSpend, amountOfDays, average } = data
+            const { totalSpend, amountOfDays, average, monthSum } = data
             store.dispatch(vars.dispatchTotalInfo(totalSpend, amountOfDays, average))
             store.dispatch(vars.dispatchDaySum(data.daySum))
+            store.dispatch(vars.dispatchMonths(monthSum))
         })
         .catch(err => {
             console.log(err)
