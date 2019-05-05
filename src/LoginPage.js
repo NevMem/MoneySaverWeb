@@ -24,16 +24,16 @@ class LoginPage extends Component {
       error: '',
     })
     axios.post('/api/login', { login: this.state.login, password: this.state.password }).then(data => data.data).then(data => {
-      if (data.err) {
+      if (data.error) {
         this.setState({
-          error: data.err,
+          error: data.error,
           loading: false,
         })
       } else {
         this.setState({
           loading: false,
         })
-        let { token, last_name, first_name, login } = data
+        let { token, last_name, first_name, login } = data.data
 
         localStorage.setItem('login', login)
         localStorage.setItem('last_name', last_name)
